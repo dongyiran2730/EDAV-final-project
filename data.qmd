@@ -1,5 +1,53 @@
 # Data
-
 ## Description
 
+#Data Preprocess
+```{r}
+library(dplyr)
+data1 <- read.csv("all_seasons.csv")
+data2 <- read.csv("nbaplayersdraft.csv")
+data2 <- rename(data2, player_name = player)
+d1 <- data1 %>%
+  group_by(player_name, draft_number) %>%
+  mutate(team_abbreviation = team_abbreviation[which.min(age)]) %>%
+  summarise(
+    player_height = mean(player_height),
+    player_weight = mean(player_weight),
+    team = first(team_abbreviation),
+    total_game = sum(gp),
+    total_pointdiff = sum(net_rating * gp),
+    off_rebound = sum(oreb_pct*gp)/total_game,
+    def_rebound = sum(dreb_pct*gp)/total_game,
+    usg_pct = sum(usg_pct*gp)/total_game,
+    ts_pct= sum(ts_pct*gp)/total_game,
+    ast_pct = sum(ast_pct*gp)/total_game,
+    country = first(country)
+  )
+data2$"overall_pick" = as.character(data2$"overall_pick")
+df <- inner_join(d1, data2, by = c("player_name" = "player_name", "draft_number" = "overall_pick"))
+```
 ## Missing value analysis
+```{r}
+miss_df <- colSums(is.na(df))  |>
+  sort(decreasing=TRUE)
+print(miss_df)
+
+#install.packages("mi")
+library(mi)
+#x <- missing_data.frame(df)
+#image(x)
+library(remotes)
+remotes::install_github("jtr13/redav")
+library(redav)
+plot_missing(df)
+```
+From the print result, we can know that the most missing values appear in the column of "X3_point_percentage" (6%) and free_throw_percentage has 27 missing values (1.9% of total data). A few other columns each has lower than 10 missing values. The missing values only occupy a little percentage of the total data. By examining the missing value patter from graph above, we discover that over 90% rows are complete and the most frequent missing pattern is only missing the data of "X3_point_percentage". We observed that there is 0 in columns, such as X3_point_percentage and free_throw_percentage, so na does not represent the player does not score 3 points or not not earn free throw point. It is not recorded due to some unknown facts or lost on the website. We have checked these data in the original website:https://www.basketball-reference.com/, where it is not recorded as well. We also notice that the missing value in one column is correalted to the missing value in another column. Otherwise, the missing pattern should be a single missing value each row. We will investigate that in the following graph. There is another two players with many missing data.
+```{r}
+library(tidyverse)
+df$na_count <- rowSums(is.na(df))
+df$draft_number <- as.numeric(df$draft_number)
+ggplot(df, aes(total_game, na_count))+
+  geom_point()+
+  labs(title = "Relationship between na_counts and total game")
+```
+From the graph above, we can notice that the two player with 17 na values all play a few games.All statistics is not recorded. It is likely that they left the league or unable to play the games, so their statistics are not recorded. We are going to discard this two players. We discover that players with na values tend to have less total games in NBA and the less games they played, the more na values they had. we may concluded that the na values are due to the less appearance. In other words, bad performance is related to the na value, so we cannot simply discard these data. Because there is only a few missing values, we may use line regression or average to replace the na.
