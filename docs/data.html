@@ -230,20 +230,18 @@ Attaching package: 'dplyr'</code></pre>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>data2 <span class="ot">&lt;-</span> <span class="fu">rename</span>(data2, <span class="at">player_name =</span> player)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> data1 <span class="sc">%&gt;%</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(player_name, draft_number) <span class="sc">%&gt;%</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">team_abbreviation =</span> team_abbreviation[<span class="fu">which.min</span>(age)]) <span class="sc">%&gt;%</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">player_height =</span> <span class="fu">mean</span>(player_height),</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">player_weight =</span> <span class="fu">mean</span>(player_weight),</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">team =</span> <span class="fu">first</span>(team_abbreviation),</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_game =</span> <span class="fu">sum</span>(gp),</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_pointdiff =</span> <span class="fu">sum</span>(net_rating <span class="sc">*</span> gp),</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">off_rebound =</span> <span class="fu">sum</span>(oreb_pct<span class="sc">*</span>gp)<span class="sc">/</span>total_game,</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">def_rebound =</span> <span class="fu">sum</span>(dreb_pct<span class="sc">*</span>gp)<span class="sc">/</span>total_game,</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">usg_pct =</span> <span class="fu">sum</span>(usg_pct<span class="sc">*</span>gp)<span class="sc">/</span>total_game,</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">ts_pct=</span> <span class="fu">sum</span>(ts_pct<span class="sc">*</span>gp)<span class="sc">/</span>total_game,</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">ast_pct =</span> <span class="fu">sum</span>(ast_pct<span class="sc">*</span>gp)<span class="sc">/</span>total_game,</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">country =</span> <span class="fu">first</span>(country)</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">player_height =</span> <span class="fu">mean</span>(player_height),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">player_weight =</span> <span class="fu">mean</span>(player_weight),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_game =</span> <span class="fu">sum</span>(gp),</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_pointdiff =</span> <span class="fu">sum</span>(net_rating <span class="sc">*</span> gp),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">off_rebound =</span> <span class="fu">sum</span>(oreb_pct<span class="sc">*</span>gp)<span class="sc">/</span>total_game,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">def_rebound =</span> <span class="fu">sum</span>(dreb_pct<span class="sc">*</span>gp)<span class="sc">/</span>total_game,</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">usg_pct =</span> <span class="fu">sum</span>(usg_pct<span class="sc">*</span>gp)<span class="sc">/</span>total_game,</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">ts_pct=</span> <span class="fu">sum</span>(ts_pct<span class="sc">*</span>gp)<span class="sc">/</span>total_game,</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">ast_pct =</span> <span class="fu">sum</span>(ast_pct<span class="sc">*</span>gp)<span class="sc">/</span>total_game,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">country =</span> <span class="fu">first</span>(country)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>`summarise()` has grouped output by 'player_name'. You can override using the
@@ -280,16 +278,16 @@ win_shares_per_48_minutes            box_plus_minus              years_active
                         2                         2                         0 
              draft_number             player_height             player_weight 
                         0                         0                         0 
-                   team.x                total_game           total_pointdiff 
+               total_game           total_pointdiff               off_rebound 
                         0                         0                         0 
-              off_rebound               def_rebound                   usg_pct 
+              def_rebound                   usg_pct                    ts_pct 
                         0                         0                         0 
-                   ts_pct                   ast_pct                   country 
+                  ast_pct                   country                        id 
                         0                         0                         0 
-                       id                      year                      rank 
+                     year                      rank                      team 
                         0                         0                         0 
-                   team.y                   college 
-                        0                         0 </code></pre>
+                  college 
+                        0 </code></pre>
 </div>
 <details>
 <summary>Code</summary>
@@ -325,9 +323,7 @@ win_shares_per_48_minutes            box_plus_minus              years_active
 </div>
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#x &lt;- missing_data.frame(df)</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co">#image(x)</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(remotes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(remotes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: package 'remotes' was built under R version 4.3.2</code></pre>
