@@ -9,11 +9,9 @@ data2 <- read.csv("nbaplayersdraft.csv")
 data2 <- rename(data2, player_name = player)
 d1 <- data1 %>%
   group_by(player_name, draft_number) %>%
-  mutate(team_abbreviation = team_abbreviation[which.min(age)]) %>%
   summarise(
     player_height = mean(player_height),
     player_weight = mean(player_weight),
-    team = first(team_abbreviation),
     total_game = sum(gp),
     total_pointdiff = sum(net_rating * gp),
     off_rebound = sum(oreb_pct*gp)/total_game,
@@ -34,8 +32,6 @@ print(miss_df)
 
 #install.packages("mi")
 library(mi)
-#x <- missing_data.frame(df)
-#image(x)
 library(remotes)
 remotes::install_github("jtr13/redav")
 library(redav)
