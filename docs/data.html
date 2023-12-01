@@ -358,6 +358,39 @@ Adding another scale for y, which will replace the existing scale.</code></pre>
 </div>
 </div>
 <p>From the print result, we can know that the most missing values appear in the column of “X3_point_percentage” (6%) and free_throw_percentage has 27 missing values (1.9% of total data). A few other columns each has lower than 10 missing values. The missing values only occupy a little percentage of the total data. By examining the missing value patter from graph above, we discover that over 90% rows are complete and the most frequent missing pattern is only missing the data of “X3_point_percentage”. We observed that there is 0 in columns, such as X3_point_percentage and free_throw_percentage, so na does not represent the player does not score 3 points or not not earn free throw point. It is not recorded due to some unknown facts or lost on the website. We have checked these data in the original website:https://www.basketball-reference.com/, where it is not recorded as well. We also notice that the missing value in one column is correalted to the missing value in another column. Otherwise, the missing pattern should be a single missing value each row. We will investigate that in the following graph. There is another two players with many missing data.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ forcats   1.0.0     ✔ readr     2.1.4
+✔ ggplot2   3.4.3     ✔ stringr   1.5.0
+✔ lubridate 1.9.2     ✔ tibble    3.2.1
+✔ purrr     1.0.2     ✔ tidyr     1.3.0
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ tidyr::complete() masks mi::complete()
+✖ tidyr::expand()   masks Matrix::expand()
+✖ dplyr::filter()   masks stats::filter()
+✖ dplyr::lag()      masks stats::lag()
+✖ tidyr::pack()     masks Matrix::pack()
+✖ tidyr::unpack()   masks Matrix::unpack()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>na_count <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(<span class="fu">is.na</span>(df))</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>draft_number <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(df<span class="sc">$</span>draft_number)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(total_game, na_count))<span class="sc">+</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Relationship between na_counts and total game"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="data_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>From the graph above, we can notice that the two player with 17 na values all play a few games.All statistics is not recorded. It is likely that they left the league or unable to play the games, so their statistics are not recorded. We are going to discard this two players. We discover that players with na values tend to have less total games in NBA and the less games they played, the more na values they had. we may concluded that the na values are due to the less appearance. In other words, bad performance is related to the na value, so we cannot simply discard these data. Because there is only a few missing values, we may use line regression or average to replace the na.</p>
 
 
 </section>
