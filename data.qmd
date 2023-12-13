@@ -47,6 +47,7 @@ Lastly, we will investigate whether players from specific colleges are more like
 ### Data Preprocess
 
 ```{r}
+#install.packages("dplyr")
 library(dplyr)
 data1 <- read.csv("all_seasons.csv")
 data2 <- read.csv("nbaplayersdraft.csv")
@@ -63,8 +64,11 @@ d1 <- data1 %>%
     usg_pct = sum(usg_pct*gp)/total_game,
     ts_pct= sum(ts_pct*gp)/total_game,
     ast_pct = sum(ast_pct*gp)/total_game,
-    country = first(country)
-  )
+    country = first(country),
+    draft_round = first(draft_round)
+  ) 
+d1$'draft_round'[df$'draft_round' == "Undrafted"] <- "0"
+d1$'draft_round' = as.numeric(d1$'draft_round')
 data2$"overall_pick" = as.character(data2$"overall_pick")
 df <- inner_join(d1, data2, by = c("player_name" = "player_name", "draft_number" = "overall_pick"))
 ```
@@ -78,7 +82,7 @@ print(miss_df)
 #install.packages("mi")
 library(mi)
 library(remotes)
-remotes::install_github("jtr13/redav")
+#remotes::install_github("jtr13/redav")
 library(redav)
 plot_missing(df)
 ```
