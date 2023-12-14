@@ -74,14 +74,20 @@ ggplot(df_draft, aes(x=name, y=value, fill=draft_round))+
   geom_bar(stat="identity", position = position_dodge())
 
 ```
+
 ```{r}
 #install.packages("ggforce")
 library(ggforce)
-p<-ggplot(df_processed, aes(x = player_height, y = player_weight)) +
-    geom_point(alpha=0.3, size=1) +
-    labs(x = "Height", y = "Weight", title = "Scatter plot by Draft Year")
+df_overtime <- df_processed%>%
+  filter(draft_round ==1)
+p<-ggplot(df_overtime, aes(x = player_height, y = player_weight)) +
+  geom_hex(bins = 10)
+  #geom_point(alpha=0.3, size=1) +
+  labs(x = "Height", y = "Weight", title = "Scatter plot by Draft Year")+
+
 for (n in c(1,2, 3)){
   p <- p + facet_wrap_paginate(~draft_year, ncol = 4, nrow = 4, page = n)
   print(p)
 }
 ```
+To analyze the draft preference of NBA team, facet the heatmap by draft year. We filter the players in the first draft round, to reflect the NBA preference. The general shape is linear relationship with height(180-220) and weight(80-130). However, there is difference in draft preference. In 1991, 1995, 2006, and 2012, NBA teams prefers players with larger height and weight. In 1994, 2006, 2011,2019，and, 2021, NBA teams prefer players with smaller height and weight. In 2012, 2017,and 2018, NBA teams prefer players with large height or small height. The preference doe not last long for years and we cannot derive any conclusion from this. However, players whose height is around 210 or 190, with corresponding weight of 120 or 80, are overall preferred to be selected.
