@@ -51,6 +51,7 @@ Lastly, we will investigate whether players from specific colleges are more like
 library(dplyr)
 data1 <- read.csv("all_seasons.csv")
 data2 <- read.csv("nbaplayersdraft.csv")
+data3 <- read.csv("player_achievements.csv")
 data2 <- rename(data2, player_name = player)
 d1 <- data1 %>%
   group_by(player_name, draft_number) %>%
@@ -74,6 +75,14 @@ d1$'draft_year'[d1$'draft_year' == "Undrafted"] <- "0"
 d1$'draft_year' = as.numeric(d1$'draft_year')
 data2$"overall_pick" = as.character(data2$"overall_pick")
 df <- inner_join(d1, data2, by = c("player_name" = "player_name", "draft_number" = "overall_pick"))
+df <- left_join(df, data3, by = c ("player_name" = "Player.Name"))
+print(names(df))
+df <- df %>%
+  mutate(
+    Total.All.Star.Selections = replace(Total.All.Star.Selections, is.na(Total.All.Star.Selections), 0),
+    Total.All.NBA.Selections = replace(Total.All.NBA.Selections, is.na(Total.All.NBA.Selections), 0),
+    Total.Championships = replace(Total.Championships, is.na(Total.Championships), 0)
+  )
 ```
 
 
