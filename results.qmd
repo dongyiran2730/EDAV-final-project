@@ -5,8 +5,10 @@ The pick number(ranking of draft player) can relatively reflect the players' abi
 ```{r}
 #install.packages("dplyr")
 #install.packages("GGally")
+#install.packages("readr")
 library(dplyr)
 library(GGally)
+library(readr)
 
 data1 <- read.csv("all_seasons.csv")
 data2 <- read.csv("nbaplayersdraft.csv")
