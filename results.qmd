@@ -62,3 +62,26 @@ ggplot(df_cleve, aes(x = value, y = college, fill=name)) +
   scale_color_manual(values = c("blue",  "red",  "green", "yellow", "purple", "#008080"))
 ```
 To analyze the influence of college in draft, we analyze the players' performance in assist, field goal, free throw, shooting efficiency, and, team plays. The college will influence the style of the player in the shooting and team plays. This analysis is to find out the styles of players from certain college. To avoid the randomness of the players, we only analyze the colleges with more than 12 players. We noticed that there is significant difference in ts, usg, and field goals. Players from Gonzaga, Villanova, and Oregan tend to have higher free throw percentage, while players from Louisville, Syracuse, and Florida, tend to lower free throw percentage. If NBA team need a player to earn points through free throw, they should pick players from Louisville, Syracuse, and Florida. The players in performance in X_3 point is around the same, except players from Louisville, Florida, Maryland, and LSU. The only two college with outstanding X_3 point are Villanova, and Oregona. If NBA team need a player to earn three points, they should pick players from Villanova, and Oregona, and avoid the four colleges mentioned above. Players from UCLA, Iowa state, and Oregan tend to have higher assist percentage, while players from stanford, Gergetown, and Maryland tend to lower assist percentage (close to 0). If NBA team need a player to earn points through corporation, they should pick players from UCLA, Iowa state, and Oregan. In conclusion, players from Oregona tend to have better performance while players from Maryland perform bad in statistics.
+
+```{r}
+df_draft <-df_processed %>%
+  group_by(draft_round)%>%
+  summarise(across(where(is.numeric), mean, na.rm = TRUE))%>%
+  select(draft_round, average_total_rebounds:win_shares)%>%
+  pivot_longer(cols=average_total_rebounds:win_shares)
+df_draft$draft_round<-as.character(df_draft$draft_round)
+ggplot(df_draft, aes(x=name, y=value, fill=draft_round))+
+  geom_bar(stat="identity", position = position_dodge())
+
+```
+```{r}
+#install.packages("ggforce")
+library(ggforce)
+p<-ggplot(df_processed, aes(x = player_height, y = player_weight)) +
+    geom_point(alpha=0.3, size=1) +
+    labs(x = "Height", y = "Weight", title = "Scatter plot by Draft Year")
+for (n in c(1,2, 3)){
+  p <- p + facet_wrap_paginate(~draft_year, ncol = 4, nrow = 4, page = n)
+  print(p)
+}
+```
