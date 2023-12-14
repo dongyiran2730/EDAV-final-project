@@ -1,20 +1,99 @@
 # Results
 
-## Teams Drafting High Achieving Players
+## Overall Draft Analysis
+
+### Points, Assists, Rebounds, Win Shares vs Pick Number (1-60)
+
+```{r}
+library(tidyr)
+
+player_achievements <- read_csv("player_achievements.csv")
+nbaplayersdraft <- read_csv("nbaplayersdraft.csv")
+
+# Calculate the average for each metric by overall_pick
+average_stats_by_pick <- nbaplayersdraft %>%
+  filter(overall_pick <= 54) %>%
+  group_by(overall_pick) %>%
+  summarise(
+    average_points_per_game = mean(points_per_game, na.rm = TRUE),
+    average_total_rebounds = mean(average_total_rebounds, na.rm = TRUE),
+    average_assists = mean(average_assists, na.rm = TRUE),
+  )
+
+# Convert to long format for faceting
+long_stats_by_pick <- average_stats_by_pick %>%
+  pivot_longer(
+    cols = starts_with("average_"),
+    names_to = "Metric",
+    values_to = "Average"
+  )
+
+# Create the faceted plot
+ggplot(long_stats_by_pick, aes(x = overall_pick, y = Average)) +
+  geom_line() + 
+  facet_wrap(~Metric, scales = "free_y", nrow = 4) +
+  theme_minimal() +
+  labs(title = "Average Player Stats by Draft Pick",
+       x = "Overall Draft Pick",
+       y = "Average") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  theme(legend.position = "none")
+
+
+```
+
+For each metric, they seem to level off around the 10-15th pick. So it would be to a team's benefit to get draft pick somewhere in the top 10. While there seems to be an occasional star player picked in between 15 and 40, generally a team shouldn't worry about the order as much.
+
+
+### Advanced NBA Stats for Top 5 Picks Over time
+
+```{r}
+
+# Filter the data to include only the top 5 picks
+top_picks <- nbaplayersdraft %>%
+  filter(overall_pick >= 1 & overall_pick <= 5)
+
+# Reshape the data to long format for faceting by metric
+top_picks_long <- top_picks %>%
+  select(year, overall_pick, win_shares, value_over_replacement) %>%
+  pivot_longer(
+    cols = c(win_shares, value_over_replacement),
+    names_to = "Metric",
+    values_to = "Value"
+  )
+
+# Create the faceted scatter plot for Win Shares and Value Over Replacement over time for the top 5 picks
+ggplot(top_picks_long, aes(x = year, y = Value, color = factor(overall_pick))) +
+  geom_point() +
+  scale_color_brewer(palette = "Set1") +  # Use a qualitative color palette
+  facet_wrap(~Metric, scales = "free_y") +  # Create facets for each metric
+  theme_minimal() +
+  labs(title = "Win Shares and Value Over Replacement for Top 5 Overall Picks Over Time",
+       x = "Year",
+       y = "Metric Value",
+       color = "Overall Pick") +
+  theme(legend.position = "right")
+
+```
+
+The first overall pick doesn't consistently end up being the best out of their draft class.
+
+
+## Total Player Achievements and their Draft Team
+
 
 ```{r}
 library(dplyr)
 library(ggplot2)
 library(readr)
+library(tidyr)
 
-player_achievements <- read_csv("player_achievements.csv")
-nbaplayersdraft <- read_csv("nbaplayersdraft.csv")
-merged_data <- left_join(player_achievements, nbaplayersdraft, by = c("Player Name" = "player"))
+merged_achievement_data <- left_join(player_achievements, nbaplayersdraft, by = c("Player Name" = "player"))
 
-filtered_data <- merged_data %>%
+merged_achievement_data <- merged_achievement_data %>%
   filter(!is.na(team))
 
-team_achievements <- filtered_data %>%
+team_achievements <- merged_achievement_data %>%
   group_by(team) %>%
   summarise(
     TotalAllStarSelections = sum(Total_All_Star_Selections, na.rm = TRUE),
@@ -23,25 +102,106 @@ team_achievements <- filtered_data %>%
   ) %>%
   arrange(desc(TotalAllStarSelections))
 
-long_achievements <- tidyr::pivot_longer(
-  team_achievements,
-  cols = c("TotalAllStarSelections", "TotalAllNBASelections", "TotalChampionships"),
-  names_to = "Achievement",
-  values_to = "Total"
-)
-
-ggplot(long_achievements, aes(x = reorder(team, -Total), y = Total, fill = Achievement)) +
-  geom_bar(stat = "identity") +
-  facet_wrap(~Achievement, scales = "free_y", nrow = 3) +
+# Create separate Cleveland dot plots for each achievement
+plot1 <- ggplot(team_achievements, aes(x = TotalAllStarSelections, y = reorder(team, TotalAllStarSelections))) +
+  geom_point() +
   theme_minimal() +
-  labs(title = "Total NBA Achievements per Team",
+  labs(title = "Total All-Star Selections per Team",
+       x = "Total All-Star Selections",
+       y = "Team") +
+  theme(axis.text.y = element_text(hjust = 1))
+
+plot2 <- ggplot(team_achievements, aes(x = TotalAllNBASelections, y = reorder(team, TotalAllNBASelections))) +
+  geom_point() +
+  theme_minimal() +
+  labs(title = "Total All-NBA Selections per Team",
+       x = "Total All-NBA Selections",
+       y = "Team") +
+  theme(axis.text.y = element_text(hjust = 1))
+
+plot3 <- ggplot(team_achievements, aes(x = TotalChampionships, y = reorder(team, TotalChampionships))) +
+  geom_point() +
+  theme_minimal() +
+  labs(title = "Total Championships per Team",
+       x = "Total Championships",
+       y = "Team") +
+  theme(axis.text.y = element_text(hjust = 1))
+
+plot1
+plot2
+plot3
+
+```
+
+
+
+## College Draft Targets
+
+### Points, Rebounds, Assists for NBA Players from each College
+
+
+```{r}
+
+# Calculate the totals for each metric by college
+total_stats_by_college <- nbaplayersdraft %>%
+  group_by(college) %>%
+  summarise(
+    total_points_per_game = sum(points_per_game, na.rm = TRUE),
+    total_total_rebounds = sum(average_total_rebounds, na.rm = TRUE),
+    total_assists = sum(average_assists, na.rm = TRUE)
+  ) %>%
+  filter(!is.na(college) & college != "") %>%
+  ungroup()
+
+# Function to create a Cleveland dot plot for a given metric
+create_cleveland_plot <- function(data, metric, title) {
+  top_colleges <- data %>%
+    top_n(50, !!sym(metric))
+
+  ggplot(top_colleges, aes(x = !!sym(metric), y = reorder(college, !!sym(metric)))) +
+    geom_point() +
+    theme_minimal() +
+    labs(title = title, x = "Total", y = "College") +
+    theme(axis.text.y = element_text(hjust = 1))
+}
+
+plot1 <- create_cleveland_plot(total_stats_by_college, "total_points_per_game", "Top 50 Colleges by Total Points Per Game")
+plot2 <- create_cleveland_plot(total_stats_by_college, "total_total_rebounds", "Top 50 Colleges by Total Total Rebounds")
+plot3 <- create_cleveland_plot(total_stats_by_college, "total_assists", "Top 50 Colleges by Total Assists")
+
+plot1
+plot2
+plot3
+
+
+```
+
+### Top College Targets for Draft Teams
+
+These colleges seem to be producing the best NBA players: Kentucky, Duke, UCLA, Arizona, Kansas. Are there team targeting players from these colleges on draft night?
+
+```{r}
+
+# Filter the dataset for the specified colleges
+filtered_data <- nbaplayersdraft %>%
+  filter(college %in% c("Kentucky", "Duke", "UCLA", "Arizona", "Kansas"))
+
+# Count the number of players drafted by each team from these colleges
+team_draft_counts <- filtered_data %>%
+  count(team, college) %>%
+  arrange(desc(n))
+
+# Create a bar plot
+ggplot(team_draft_counts, aes(x = reorder(team, n), y = n, fill = college)) +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  labs(title = "NBA Team Draft Counts from Top 5 Basketball Colleges",
        x = "Team",
-       y = "Total") +
+       y = "Number of Players Drafted") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   theme(legend.position = "bottom")
 
 ```
-
 
 
 
