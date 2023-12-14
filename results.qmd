@@ -1,4 +1,5 @@
 # Results
+The pick number(ranking of draft player) can relatively reflect the players' ability, especially for the top 10 players. However, the players with higher pick number does not represent they are absolutely better than players with lower pick number, in the aspect of values and win shares.The ability in drafting better player does not have significant relationship with wining championships.Players from Oregon and Kentucky university tend to perform well in NBA. Players from Maryland university perform bad. Players with larger weight and height always have high rebound score, while players with lower weight and height always have higher assist score. NBA team tend to choose players around 210cm and 120kg or players around 190cm and 80kg. Non-american players do not show significant adapting problem in NBA. 
 
 ## Data Preprocess
 ```{r}
@@ -197,6 +198,8 @@ ggplot(df_team, aes(x = value, y = team, fill=name)) +
   labs(y = "Team", x = "Category")+
   scale_color_manual(values = c("blue", "red",  "green", "yellow", "purple", "#008080"))
 ```
+NOH, DET, and BRK teams always choose the players with greater free throw ability. The players chosen by NOK and CHO tend to have low free throw percentage. TOR and MIL are better at choosing players with strong 3 point percentage. Players picked by WSB, LAC, and GSW tend to have low 3 point percentage. NOK teams is likely to choose players with low assist ability. There is no obvious difference among players of teams in field goal, ts and usg. In summary, teams choose the players with different strength, but players picked by NOK tend to weakness in all aspects.
+
 ## College Draft Targets
 
 ### Points, Rebounds, Assists for NBA Players from each College
