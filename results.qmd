@@ -176,6 +176,26 @@ plot3
 
 ```
 
+### Analyze the performance of players based on their colleges
+```{r}
+df_cleve <- df_processed %>%
+  select(college, usg_pct:ast_pct, field_goal_percentage:free_throw_percentage)%>%
+  mutate(college = ifelse(college == "", "Unknown", college))%>%
+  group_by(college)%>%
+  filter(n()>12)%>%
+  summarise(across(where(is.numeric), mean, na.rm = TRUE))%>%
+  arrange(free_throw_percentage) %>%  
+  mutate(college = factor(college, levels = college)) %>%
+  pivot_longer(cols=usg_pct:free_throw_percentage)
+
+
+ggplot(df_cleve, aes(x = value, y = college, fill=name)) + 
+  geom_point(stat = "identity", shape = 21, color = "black", size = 1.5) +
+  labs(y = "College", x = "Category")+
+  scale_color_manual(values = c("blue", "red",  "green", "yellow", "purple", "#008080"))
+```
+To analyze the influence of college in draft, we analyze the players' performance in assist, field goal, free throw, shooting efficiency, and, team plays. The college will influence the style of the player in the shooting and team plays. This analysis is to find out the styles of players from certain college. To avoid the randomness of the players, we only analyze the colleges with more than 12 players. We noticed that there is significant difference in ts, usg, and field goals. Players from Gonzaga, Villanova, and Oregan tend to have higher free throw percentage, while players from Louisville, Syracuse, and Florida, tend to lower free throw percentage. If NBA team need a player to earn points through free throw, they should pick players from Louisville, Syracuse, and Florida. The players in performance in X_3 point is around the same, except players from Louisville, Florida, Maryland, and LSU. The only two college with outstanding X_3 point are Villanova, and Oregona. If NBA team need a player to earn three points, they should pick players from Villanova, and Oregona, and avoid the four colleges mentioned above. Players from UCLA, Iowa state, and Oregan tend to have higher assist percentage, while players from stanford, Gergetown, and Maryland tend to lower assist percentage (close to 0). If NBA team need a player to earn points through corporation, they should pick players from UCLA, Iowa state, and Oregan. In conclusion, players from Oregona tend to have better performance while players from Maryland perform bad in statistics.
+
 ### Top College Targets for Draft Teams
 
 These colleges seem to be producing the best NBA players: Kentucky, Duke, UCLA, Arizona, Kansas. Are there team targeting players from these colleges on draft night?
@@ -206,7 +226,7 @@ ggplot(team_draft_counts, aes(x = reorder(team, n), y = n, fill = college)) +
 
 
 ## Drafting Based on Physical Attributes
-
+### Preprocess the missing values
 ```{r}
 #install.packages("GGally")
 library(GGally)
@@ -219,57 +239,61 @@ df_processed <- df_1 %>%
   mutate_if(is.numeric, ~ifelse(is.na(.), 0, .))
 
 ```
-
+### Analyze the perfomance based on players's height and weight
 ```{r}
 df_para <- df_processed[, c(3, 4, 6:11, 22:34)]
 df_related <- df_para[, c(1,2, 4,5, 8,12, 16, 17)]
-#ggparcoord(df_para, alphaLines = .3,
-#          scale = "uniminmax")
+
+
 ggpairs(df_related,
         lower = list(continuous = wrap("points", alpha = 0.1, size=0.2)))
-cor_matrix <- cor(df_para)
-print(cor_matrix)
-```
-To analyze the factor of weight and height in drafting. We first analyzed the correlation matrix of the height and weight to the other performance statistics. It is reasonable that height and weight are highly correlated and statistics about rebound, assist, and X_3 points have high absolute value of correlation score with height and weight. Then, we analyze the pair plot of these variables. The distribution of performance variables are all positive skewed, while the distribution of height and weight are close to the normal distribution. The scatter plot of height and weight with performance statistics are almost the same. We have the same conclusion for them. The different thing is height plot tend to have grid shape, which may caused by players tend to round up their height to integer. Statistics about rebound are positive related to the height weight, Players with high weight and height tend to have larger variance in the rebound statistics, whereas player with low weight and height has lower variance. We can draw the following conclusion that if the team need to strength their rebound aspects, they should absolutely draw players with high height and weight, but these players may not get enough rebound in the match.The similar things happen to the assist statistics. Assist statistics are negatively correlated to the height and weight. Players with high weight and height tend to have lower variance in the assist statistics, whereas player with low weight and height has higher variance. If a team need to strength their team corporation(assist), they should absolutely draw players with low height and weight, but these players may not assist enough in the match. We also discover that the variance difference is more obvious in the average assist, but less in assist percentage(Percentage of teammate field goals the player assisted). ????any conclusion?
 
+
+cor_matrix <- cor(df_para)
+print(cor_matrix )
+```
+To analyze the factor of weight and height in drafting. We first analyzed the correlation matrix of the height and weight to the other performance statistics. It is reasonable that height and weight are highly correlated and statistics about rebound, assist, and X_3 points have high absolute value of correlation score with height and weight. Then, we analyze the pair plot of these variables. The distribution of performance variables are all positive skewed, while the distribution of height and weight are close to the normal distribution. The scatter plot of height and weight with performance statistics are almost the same. We have the same conclusion for them. The different thing is height plot tend to have grid shape, which may caused by players tend to round up their height to integer. Statistics about rebound are positive related to the height weight, Players with high weight and height tend to have larger variance in the rebound statistics, whereas player with low weight and height has lower variance. We can draw the following conclusion that if the team need to strength their rebound aspects, they should absolutely draw players with high height and weight, but these players may not get enough rebound in the match.The similar things happen to the assist statistics. Assist statistics are negatively correlated to the height and weight. Players with high weight and height tend to have lower variance in the assist statistics, whereas player with low weight and height has higher variance. If a team need to strength their team corporation(assist), they should absolutely draw players with low height and weight, but these players may not assist enough in the match. We also discover that the variance difference is more obvious in the average assist, but less in assist percentage(Percentage of teammate field goals the player assisted). 
+
+### Analyze the weight and height of players over time
+```{r}
+#install.packages("ggforce")
+library(ggforce)
+df_overtime <- df_processed%>%
+  filter(draft_round ==1)
+
+
+p<-ggplot(df_overtime, aes(x = player_height, y = player_weight)) +
+  geom_hex(bins = 10)
+  #geom_point(alpha=0.3, size=1) +
+  labs(x = "Height", y = "Weight", title = "Scatter plot by Draft Year")
+
+for (n in c(1,2, 3)){
+  p <- p + facet_wrap_paginate(~draft_year, ncol = 4, nrow = 4, page = n)
+  print(p)
+}
+```
+To analyze the draft preference of NBA team, facet the heatmap by draft year. We filter the players in the first draft round, to reflect the NBA preference. The general shape is linear relationship with height(180-220) and weight(80-130). However, there is difference in draft preference. In 1991, 1995, 2006, and 2012, NBA teams prefers players with larger height and weight. In 1994, 2006, 2011,2019，and, 2021, NBA teams prefer players with smaller height and weight. In 2012, 2017,and 2018, NBA teams prefer players with large height or small height. The preference doe not last long for years and we cannot derive any conclusion from this. However, players whose height is around 210 or 190, with corresponding weight of 120 or 80, are overall preferred to be selected.
+
+### Analyze the perfomance difference bwtween American and non-American players
 ```{r}
 df_origin <- df_processed %>%
   mutate(country = ifelse(country == "USA", "USA","non-American"))%>%
   group_by(country)%>%
   summarise(across(where(is.numeric), mean, na.rm = TRUE))%>%
-  select(-na_count, -year, -id, -minutes_played, -points, -total_rebounds, -box_plus_minus, - win_shares_per_48_minutes, -win_shares,-off_rebound, -def_rebound,-usg_pct, -total_pointdiff)%>%
+  select(country,usg_pct:ast_pct, field_goal_percentage:free_throw_percentage)%>%
   lapply(function(x) if(is.numeric(x)) x / x[1] else x) %>%
   as.data.frame()%>%
-  pivot_longer(cols = draft_number:value_over_replacement, names_to = "statistics" )
-ggplot(df_origin, aes(statistics, value, fill = country))+
-  geom_bar(stat="identity", position = position_dodge())
-```
-No difference observed
+  pivot_longer(cols = usg_pct:free_throw_percentage, names_to = "statistics" )
 
-```{r}
-#install.packages("hexbin")
-df_1round <- df_processed |>
-  select(player_height, player_weight, draft_round)
-ggplot(df_1round, aes(x=player_height, y=player_weight))+
-  geom_hex(bins = 10)+
-  scale_fill_viridis_c()
+
+ggplot(df_origin, aes(statistics, value, fill = country))+
+  geom_bar(stat="identity", position = position_dodge())+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
-The player with 200-210? eight and 90-110? weight conclusion?
-```{r}
-df_cleve <- df_processed %>%
-  select(college, usg_pct:ast_pct, field_goal_percentage:free_throw_percentage)%>%
-  group_by(college)%>%
-  filter(n()>12)%>%
-  summarise(across(where(is.numeric), mean, na.rm = TRUE))%>%
-  arrange(free_throw_percentage) %>%  
-  mutate(college = factor(college, levels = college)) %>%
-  pivot_longer(cols=usg_pct:free_throw_percentage)
-ggplot(df_cleve, aes(x = value, y = college, fill=name)) + 
-  geom_point(stat = "identity", shape = 21, color = "black", size = 1.5) +
-  labs(y = "College", x = "Category")+
-  scale_color_manual(values = c("blue",  "red",  "green", "yellow", "purple", "#008080"))
-```
-To analyze the influence of college in draft, we analyze the players' performance in assist, field goal, free throw, shooting efficiency, and, team plays. The college will influence the style of the player in the shooting and team plays. This analysis is to find out the styles of players from certain college. To avoid the randomness of the players, we only analyze the colleges with more than 12 players. We noticed that there is significant difference in ts, usg, and field goals. Players from Gonzaga, Villanova, and Oregan tend to have higher free throw percentage, while players from Louisville, Syracuse, and Florida, tend to lower free throw percentage. If NBA team need a player to earn points through free throw, they should pick players from Louisville, Syracuse, and Florida. The players in performance in X_3 point is around the same, except players from Louisville, Florida, Maryland, and LSU. The only two college with outstanding X_3 point are Villanova, and Oregona. If NBA team need a player to earn three points, they should pick players from Villanova, and Oregona, and avoid the four colleges mentioned above. Players from UCLA, Iowa state, and Oregan tend to have higher assist percentage, while players from stanford, Gergetown, and Maryland tend to lower assist percentage (close to 0). If NBA team need a player to earn points through corporation, they should pick players from UCLA, Iowa state, and Oregan. In conclusion, players from Oregona tend to have better performance while players from Maryland perform bad in statistics.
+The overall performance of non-American players is slightly worse than that of American player. The obvious difference between american player and non-american player is assist percentage. The assist percentage of non-american player is 20% lower than that of american player. Non-american did not show any adapting problem in playing in NBA. Drafting american players will not be a better choice. 
+
+
+### 0ptional
 
 ```{r}
 df_draft <-df_processed %>%
@@ -282,20 +306,3 @@ ggplot(df_draft, aes(x=name, y=value, fill=draft_round))+
   geom_bar(stat="identity", position = position_dodge())
 
 ```
-
-```{r}
-#install.packages("ggforce")
-library(ggforce)
-df_overtime <- df_processed%>%
-  filter(draft_round ==1)
-p<-ggplot(df_overtime, aes(x = player_height, y = player_weight)) +
-  geom_hex(bins = 10)
-  #geom_point(alpha=0.3, size=1) +
-  labs(x = "Height", y = "Weight", title = "Scatter plot by Draft Year")+
-
-for (n in c(1,2, 3)){
-  p <- p + facet_wrap_paginate(~draft_year, ncol = 4, nrow = 4, page = n)
-  print(p)
-}
-```
-To analyze the draft preference of NBA team, facet the heatmap by draft year. We filter the players in the first draft round, to reflect the NBA preference. The general shape is linear relationship with height(180-220) and weight(80-130). However, there is difference in draft preference. In 1991, 1995, 2006, and 2012, NBA teams prefers players with larger height and weight. In 1994, 2006, 2011,2019，and, 2021, NBA teams prefer players with smaller height and weight. In 2012, 2017,and 2018, NBA teams prefer players with large height or small height. The preference doe not last long for years and we cannot derive any conclusion from this. However, players whose height is around 210 or 190, with corresponding weight of 120 or 80, are overall preferred to be selected.
