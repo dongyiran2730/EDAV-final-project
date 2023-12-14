@@ -1,5 +1,54 @@
 # Results
 
+## Data Preprocess
+```{r}
+#install.packages("dplyr")
+#install.packages("GGally")
+library(dplyr)
+library(GGally)
+
+data1 <- read.csv("all_seasons.csv")
+data2 <- read.csv("nbaplayersdraft.csv")
+data3 <- read.csv("player_achievements.csv")
+data2 <- rename(data2, player_name = player)
+d1 <- data1 %>%
+  group_by(player_name, draft_number) %>%
+  summarise(
+    player_height = mean(player_height),
+    player_weight = mean(player_weight),
+    total_game = sum(gp),
+    total_pointdiff = sum(net_rating * gp),
+    off_rebound = sum(oreb_pct*gp)/total_game,
+    def_rebound = sum(dreb_pct*gp)/total_game,
+    usg_pct = sum(usg_pct*gp)/total_game,
+    ts_pct= sum(ts_pct*gp)/total_game,
+    ast_pct = sum(ast_pct*gp)/total_game,
+    country = first(country),
+    draft_round = first(draft_round),
+    draft_year = first(draft_year)
+  ) 
+d1$'draft_round'[d1$'draft_round' == "Undrafted"] <- "0"
+d1$'draft_round' = as.numeric(d1$'draft_round')
+d1$'draft_year'[d1$'draft_year' == "Undrafted"] <- "0"
+d1$'draft_year' = as.numeric(d1$'draft_year')
+data2$"overall_pick" = as.character(data2$"overall_pick")
+df <- inner_join(d1, data2, by = c("player_name" = "player_name", "draft_number" = "overall_pick"))
+df <- left_join(df, data3, by = c ("player_name" = "Player.Name"))
+print(names(df))
+df <- df %>%
+  mutate(
+    Total_All_Star_Selections = replace(Total_All_Star_Selections, is.na(Total_All_Star_Selections), 0),
+    Total_All_NBA_Selections = replace(Total_All_NBA_Selections, is.na(Total_All_NBA_Selections), 0),
+    Total_Championships = replace(Total_Championships, is.na(Total_Championships), 0)
+  )
+df$na_count <- rowSums(is.na(df))
+df$draft_number <- as.numeric(df$draft_number)
+
+df_1 <- df[rowSums(is.na(df)) <= 10, ]
+df_processed <- df_1 %>%
+  mutate_if(is.numeric, ~ifelse(is.na(.), 0, .))
+
+```
 ## Overall Draft Analysis
 
 ### Points, Assists, Rebounds, Win Shares vs Pick Number (1-60)
@@ -132,9 +181,22 @@ plot2
 plot3
 
 ```
+### Players performance and their drafted team
+```{r}
+df_team <- df_processed %>%
+  select(team, usg_pct:ast_pct, field_goal_percentage:free_throw_percentage)%>%
+  group_by(team)%>%
+  summarise(across(where(is.numeric), mean, na.rm = TRUE))%>%
+  arrange(free_throw_percentage) %>%  
+  mutate(team = factor(team, levels = team)) %>%
+  pivot_longer(cols=usg_pct:free_throw_percentage)
 
 
-
+ggplot(df_team, aes(x = value, y = team, fill=name)) + 
+  geom_point(stat = "identity", shape = 21, color = "black", size = 1.5) +
+  labs(y = "Team", x = "Category")+
+  scale_color_manual(values = c("blue", "red",  "green", "yellow", "purple", "#008080"))
+```
 ## College Draft Targets
 
 ### Points, Rebounds, Assists for NBA Players from each College
@@ -226,19 +288,7 @@ ggplot(team_draft_counts, aes(x = reorder(team, n), y = n, fill = college)) +
 
 
 ## Drafting Based on Physical Attributes
-### Preprocess the missing values
-```{r}
-#install.packages("GGally")
-library(GGally)
-library(dplyr)
 
-
-df_1 <- df[rowSums(is.na(df)) <= 10, ]
-
-df_processed <- df_1 %>%
-  mutate_if(is.numeric, ~ifelse(is.na(.), 0, .))
-
-```
 ### Analyze the perfomance based on players's height and weight
 ```{r}
 df_para <- df_processed[, c(3, 4, 6:11, 22:34)]
