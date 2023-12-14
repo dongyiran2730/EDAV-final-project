@@ -79,9 +79,9 @@ df <- left_join(df, data3, by = c ("player_name" = "Player.Name"))
 print(names(df))
 df <- df %>%
   mutate(
-    Total.All.Star.Selections = replace(Total.All.Star.Selections, is.na(Total.All.Star.Selections), 0),
-    Total.All.NBA.Selections = replace(Total.All.NBA.Selections, is.na(Total.All.NBA.Selections), 0),
-    Total.Championships = replace(Total.Championships, is.na(Total.Championships), 0)
+    Total.All.Star.Selections = replace(Total_All_Star_Selections, is.na(Total_All_Star_Selections), 0),
+    Total.All.NBA.Selections = replace(Total_All_NBA_Selections, is.na(Total_All_NBA_Selections), 0),
+    Total.Championships = replace(Total_Championships, is.na(Total_Championships), 0)
   )
 ```
 
@@ -98,7 +98,11 @@ library(remotes)
 library(redav)
 plot_missing(df)
 ```
-From the print result, we can know that the most missing values appear in the column of "X3_point_percentage" (6%) and free_throw_percentage has 27 missing values (1.9% of total data). A few other columns each has lower than 10 missing values. The missing values only occupy a little percentage of the total data. By examining the missing value patter from graph above, we discover that over 90% rows are complete and the most frequent missing pattern is only missing the data of "X3_point_percentage". We observed that there is 0 in columns, such as X3_point_percentage and free_throw_percentage, so na does not represent the player does not score 3 points or not not earn free throw point. It is not recorded due to some unknown facts or lost on the website. We have checked these data in the original website:https://www.basketball-reference.com/, where it is not recorded as well. We also notice that the missing value in one column is correalted to the missing value in another column. Otherwise, the missing pattern should be a single missing value each row. We will investigate that in the following graph. There is another two players with many missing data.
+From the print result, we can see that the column with the most missing values is "3_point_percentage" (6%), and "free_throw_percentage" has 27 missing values, accounting for 1.9% of the total data. A few other columns have fewer than 10 missing values each. The missing values only account for a small percentage of the total data. When examining the missing value pattern from the graph above, we discover that over 90% of the rows are complete, and the most common missing pattern is the absence of data in the "X3_point_percentage" column.
+
+We have observed that there are zeros in columns such as "3_point_percentage" and "free_throw_percentage," so "na" does not indicate that the player did not score 3 points or did not earn free throw points. Instead, it is not recorded due to unknown factors or data loss on the website. We have verified this data on the original website (https://www.basketball-reference.com/), where it is also not recorded. Additionally, we have noticed that missing values in one column are correlated with missing values in another column. Otherwise, the missing pattern would be a single missing value in each row. We will investigate this further in the following graph. There are also two players with a significant amount of missing data.
+
+
 ```{r}
 library(tidyverse)
 df$na_count <- rowSums(is.na(df))
@@ -107,4 +111,6 @@ ggplot(df, aes(total_game, na_count))+
   geom_point()+
   labs(title = "Relationship between na_counts and total game")
 ```
-From the graph above, we can notice that the two player with 17 na values all play a few games.All statistics is not recorded. It is likely that they left the league or unable to play the games, so their statistics are not recorded. We are going to discard this two players. We discover that players with na values tend to have less total games in NBA and the less games they played, the more na values they had. we may concluded that the na values are due to the less appearance. In other words, bad performance is related to the na value, so we cannot simply discard these data. Because there is only a few missing values, we may use line regression or average to replace the na.
+From the graph above, we can observe that the two players with 17 "na" values have played only a few games, and as a result, all their statistics are not recorded: Jason Preston and RaiQuan Gray. Doing some research, both players were waived by their teams and are playing in the G-League (minor league organization of the NBA), therefore, we will exclude these two players from our analysis which is focused on NBA players.
+
+We have also noticed that players with "na" values tend to have fewer total games in the NBA, and the fewer games they have played, the more "na" values are present in their statistics. This suggests that the "na" values are associated with fewer appearances, possibly indicating poorer performance. Therefore, we cannot simply discard this data. Given the limited number of missing values, we may consider using linear regression or averaging to replace the "na" values in these cases.

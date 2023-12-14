@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -138,7 +172,35 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#data-preprocess" id="toc-data-preprocess" class="nav-link active" data-scroll-target="#data-preprocess"><span class="header-section-number">3.1</span> Data Preprocess</a></li>
+  <li><a href="#overall-draft-analysis" id="toc-overall-draft-analysis" class="nav-link" data-scroll-target="#overall-draft-analysis"><span class="header-section-number">3.2</span> Overall Draft Analysis</a>
+  <ul class="collapse">
+  <li><a href="#points-assists-rebounds-win-shares-vs-pick-number-1-60" id="toc-points-assists-rebounds-win-shares-vs-pick-number-1-60" class="nav-link" data-scroll-target="#points-assists-rebounds-win-shares-vs-pick-number-1-60"><span class="header-section-number">3.2.1</span> Points, Assists, Rebounds, Win Shares vs Pick Number (1-60)</a></li>
+  <li><a href="#advanced-nba-stats-for-top-5-picks-over-time" id="toc-advanced-nba-stats-for-top-5-picks-over-time" class="nav-link" data-scroll-target="#advanced-nba-stats-for-top-5-picks-over-time"><span class="header-section-number">3.2.2</span> Advanced NBA Stats for Top 5 Picks Over time</a></li>
+  </ul></li>
+  <li><a href="#total-player-achievements-and-their-draft-team" id="toc-total-player-achievements-and-their-draft-team" class="nav-link" data-scroll-target="#total-player-achievements-and-their-draft-team"><span class="header-section-number">3.3</span> Total Player Achievements and their Draft Team</a>
+  <ul class="collapse">
+  <li><a href="#players-performance-and-their-drafted-team" id="toc-players-performance-and-their-drafted-team" class="nav-link" data-scroll-target="#players-performance-and-their-drafted-team"><span class="header-section-number">3.3.1</span> Players performance and their drafted team</a></li>
+  </ul></li>
+  <li><a href="#college-draft-targets" id="toc-college-draft-targets" class="nav-link" data-scroll-target="#college-draft-targets"><span class="header-section-number">3.4</span> College Draft Targets</a>
+  <ul class="collapse">
+  <li><a href="#points-rebounds-assists-for-nba-players-from-each-college" id="toc-points-rebounds-assists-for-nba-players-from-each-college" class="nav-link" data-scroll-target="#points-rebounds-assists-for-nba-players-from-each-college"><span class="header-section-number">3.4.1</span> Points, Rebounds, Assists for NBA Players from each College</a></li>
+  <li><a href="#analyze-the-performance-of-players-based-on-their-colleges" id="toc-analyze-the-performance-of-players-based-on-their-colleges" class="nav-link" data-scroll-target="#analyze-the-performance-of-players-based-on-their-colleges"><span class="header-section-number">3.4.2</span> Analyze the performance of players based on their colleges</a></li>
+  <li><a href="#top-college-targets-for-draft-teams" id="toc-top-college-targets-for-draft-teams" class="nav-link" data-scroll-target="#top-college-targets-for-draft-teams"><span class="header-section-number">3.4.3</span> Top College Targets for Draft Teams</a></li>
+  </ul></li>
+  <li><a href="#drafting-based-on-physical-attributes" id="toc-drafting-based-on-physical-attributes" class="nav-link" data-scroll-target="#drafting-based-on-physical-attributes"><span class="header-section-number">3.5</span> Drafting Based on Physical Attributes</a>
+  <ul class="collapse">
+  <li><a href="#analyze-the-perfomance-based-on-playerss-height-and-weight" id="toc-analyze-the-perfomance-based-on-playerss-height-and-weight" class="nav-link" data-scroll-target="#analyze-the-perfomance-based-on-playerss-height-and-weight"><span class="header-section-number">3.5.1</span> Analyze the perfomance based on players’s height and weight</a></li>
+  <li><a href="#analyze-the-weight-and-height-of-players-over-time" id="toc-analyze-the-weight-and-height-of-players-over-time" class="nav-link" data-scroll-target="#analyze-the-weight-and-height-of-players-over-time"><span class="header-section-number">3.5.2</span> Analyze the weight and height of players over time</a></li>
+  <li><a href="#analyze-the-perfomance-difference-bwtween-american-and-non-american-players" id="toc-analyze-the-perfomance-difference-bwtween-american-and-non-american-players" class="nav-link" data-scroll-target="#analyze-the-perfomance-difference-bwtween-american-and-non-american-players"><span class="header-section-number">3.5.3</span> Analyze the perfomance difference bwtween American and non-American players</a></li>
+  <li><a href="#ptional" id="toc-ptional" class="nav-link" data-scroll-target="#ptional"><span class="header-section-number">3.5.4</span> 0ptional</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/dongyiran2730/EDAV-final-project/edit/main/results.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/dongyiran2730/EDAV-final-project/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -160,8 +222,741 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<p>The pick number(ranking of draft player) can relatively reflect the players’ ability, especially for the top 10 players. However, the players with higher pick number does not represent they are absolutely better than players with lower pick number, in the aspect of values and win shares.The ability in drafting better player does not have significant relationship with wining championships.Players from Oregon and Kentucky university tend to perform well in NBA. Players from Maryland university perform bad. Players with larger weight and height always have high rebound score, while players with lower weight and height always have higher assist score. NBA team tend to choose players around 210cm and 120kg or players around 190cm and 80kg. Non-american players do not show significant adapting problem in NBA.</p>
+<section id="data-preprocess" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="data-preprocess"><span class="header-section-number">3.1</span> Data Preprocess</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("dplyr")</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("GGally")</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("readr")</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: ggplot2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Registered S3 method overwritten by 'GGally':
+  method from   
+  +.gg   ggplot2</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>data1 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"all_seasons.csv"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>data2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"nbaplayersdraft.csv"</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>data3 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"player_achievements.csv"</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>data2 <span class="ot">&lt;-</span> <span class="fu">rename</span>(data2, <span class="at">player_name =</span> player)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> data1 <span class="sc">%&gt;%</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(player_name, draft_number) <span class="sc">%&gt;%</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">player_height =</span> <span class="fu">mean</span>(player_height),</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">player_weight =</span> <span class="fu">mean</span>(player_weight),</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_game =</span> <span class="fu">sum</span>(gp),</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_pointdiff =</span> <span class="fu">sum</span>(net_rating <span class="sc">*</span> gp),</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">off_rebound =</span> <span class="fu">sum</span>(oreb_pct<span class="sc">*</span>gp)<span class="sc">/</span>total_game,</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">def_rebound =</span> <span class="fu">sum</span>(dreb_pct<span class="sc">*</span>gp)<span class="sc">/</span>total_game,</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">usg_pct =</span> <span class="fu">sum</span>(usg_pct<span class="sc">*</span>gp)<span class="sc">/</span>total_game,</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">ts_pct=</span> <span class="fu">sum</span>(ts_pct<span class="sc">*</span>gp)<span class="sc">/</span>total_game,</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">ast_pct =</span> <span class="fu">sum</span>(ast_pct<span class="sc">*</span>gp)<span class="sc">/</span>total_game,</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">country =</span> <span class="fu">first</span>(country),</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">draft_round =</span> <span class="fu">first</span>(draft_round),</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">draft_year =</span> <span class="fu">first</span>(draft_year)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'player_name'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>d1<span class="sc">$</span><span class="st">'draft_round'</span>[d1<span class="sc">$</span><span class="st">'draft_round'</span> <span class="sc">==</span> <span class="st">"Undrafted"</span>] <span class="ot">&lt;-</span> <span class="st">"0"</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>d1<span class="sc">$</span><span class="st">'draft_round'</span> <span class="ot">=</span> <span class="fu">as.numeric</span>(d1<span class="sc">$</span><span class="st">'draft_round'</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>d1<span class="sc">$</span><span class="st">'draft_year'</span>[d1<span class="sc">$</span><span class="st">'draft_year'</span> <span class="sc">==</span> <span class="st">"Undrafted"</span>] <span class="ot">&lt;-</span> <span class="st">"0"</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>d1<span class="sc">$</span><span class="st">'draft_year'</span> <span class="ot">=</span> <span class="fu">as.numeric</span>(d1<span class="sc">$</span><span class="st">'draft_year'</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>data2<span class="sc">$</span><span class="st">"overall_pick"</span> <span class="ot">=</span> <span class="fu">as.character</span>(data2<span class="sc">$</span><span class="st">"overall_pick"</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(d1, data2, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"player_name"</span> <span class="ot">=</span> <span class="st">"player_name"</span>, <span class="st">"draft_number"</span> <span class="ot">=</span> <span class="st">"overall_pick"</span>))</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">left_join</span>(df, data3, <span class="at">by =</span> <span class="fu">c</span> (<span class="st">"player_name"</span> <span class="ot">=</span> <span class="st">"Player.Name"</span>))</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">names</span>(df))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "player_name"               "draft_number"             
+ [3] "player_height"             "player_weight"            
+ [5] "total_game"                "total_pointdiff"          
+ [7] "off_rebound"               "def_rebound"              
+ [9] "usg_pct"                   "ts_pct"                   
+[11] "ast_pct"                   "country"                  
+[13] "draft_round"               "draft_year"               
+[15] "id"                        "year"                     
+[17] "rank"                      "team"                     
+[19] "college"                   "years_active"             
+[21] "games"                     "minutes_played"           
+[23] "points"                    "total_rebounds"           
+[25] "assists"                   "field_goal_percentage"    
+[27] "X3_point_percentage"       "free_throw_percentage"    
+[29] "average_minutes_played"    "points_per_game"          
+[31] "average_total_rebounds"    "average_assists"          
+[33] "win_shares"                "win_shares_per_48_minutes"
+[35] "box_plus_minus"            "value_over_replacement"   
+[37] "Total_All_Star_Selections" "Total_All_NBA_Selections" 
+[39] "Total_Championships"      </code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">Total_All_Star_Selections =</span> <span class="fu">replace</span>(Total_All_Star_Selections, <span class="fu">is.na</span>(Total_All_Star_Selections), <span class="dv">0</span>),</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Total_All_NBA_Selections =</span> <span class="fu">replace</span>(Total_All_NBA_Selections, <span class="fu">is.na</span>(Total_All_NBA_Selections), <span class="dv">0</span>),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Total_Championships =</span> <span class="fu">replace</span>(Total_Championships, <span class="fu">is.na</span>(Total_Championships), <span class="dv">0</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>na_count <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(<span class="fu">is.na</span>(df))</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>draft_number <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(df<span class="sc">$</span>draft_number)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>df_1 <span class="ot">&lt;-</span> df[<span class="fu">rowSums</span>(<span class="fu">is.na</span>(df)) <span class="sc">&lt;=</span> <span class="dv">10</span>, ]</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>df_processed <span class="ot">&lt;-</span> df_1 <span class="sc">%&gt;%</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_if</span>(is.numeric, <span class="sc">~</span><span class="fu">ifelse</span>(<span class="fu">is.na</span>(.), <span class="dv">0</span>, .))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>`mutate_if()` ignored the following grouping variables:
+• Column `player_name`</code></pre>
+</div>
+</div>
+</section>
+<section id="overall-draft-analysis" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="overall-draft-analysis"><span class="header-section-number">3.2</span> Overall Draft Analysis</h2>
+<section id="points-assists-rebounds-win-shares-vs-pick-number-1-60" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="points-assists-rebounds-win-shares-vs-pick-number-1-60"><span class="header-section-number">3.2.1</span> Points, Assists, Rebounds, Win Shares vs Pick Number (1-60)</h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>player_achievements <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"player_achievements.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 580 Columns: 4
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (1): Player Name
+dbl (3): Total_All_Star_Selections, Total_All_NBA_Selections, Total_Champion...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>nbaplayersdraft <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"nbaplayersdraft.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 1922 Columns: 24
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (3): team, player, college
+dbl (21): id, year, rank, overall_pick, years_active, games, minutes_played,...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the average for each metric by overall_pick</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>average_stats_by_pick <span class="ot">&lt;-</span> nbaplayersdraft <span class="sc">%&gt;%</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(overall_pick <span class="sc">&lt;=</span> <span class="dv">54</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(overall_pick) <span class="sc">%&gt;%</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">average_points_per_game =</span> <span class="fu">mean</span>(points_per_game, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">average_total_rebounds =</span> <span class="fu">mean</span>(average_total_rebounds, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">average_assists =</span> <span class="fu">mean</span>(average_assists, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to long format for faceting</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>long_stats_by_pick <span class="ot">&lt;-</span> average_stats_by_pick <span class="sc">%&gt;%</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"average_"</span>),</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"Metric"</span>,</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"Average"</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the faceted plot</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(long_stats_by_pick, <span class="fu">aes</span>(<span class="at">x =</span> overall_pick, <span class="at">y =</span> Average)) <span class="sc">+</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Metric, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">nrow =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Average Player Stats by Draft Pick"</span>,</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Overall Draft Pick"</span>,</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Average"</span>) <span class="sc">+</span></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>For each metric, they seem to level off around the 10-15th pick. So it would be to a team’s benefit to get draft pick somewhere in the top 10. While there seems to be an occasional star player picked in between 15 and 40, generally a team shouldn’t worry about the order as much.</p>
+</section>
+<section id="advanced-nba-stats-for-top-5-picks-over-time" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="advanced-nba-stats-for-top-5-picks-over-time"><span class="header-section-number">3.2.2</span> Advanced NBA Stats for Top 5 Picks Over time</h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the data to include only the top 5 picks</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>top_picks <span class="ot">&lt;-</span> nbaplayersdraft <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(overall_pick <span class="sc">&gt;=</span> <span class="dv">1</span> <span class="sc">&amp;</span> overall_pick <span class="sc">&lt;=</span> <span class="dv">5</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape the data to long format for faceting by metric</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>top_picks_long <span class="ot">&lt;-</span> top_picks <span class="sc">%&gt;%</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(year, overall_pick, win_shares, value_over_replacement) <span class="sc">%&gt;%</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">c</span>(win_shares, value_over_replacement),</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"Metric"</span>,</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"Value"</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the faceted scatter plot for Win Shares and Value Over Replacement over time for the top 5 picks</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(top_picks_long, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> Value, <span class="at">color =</span> <span class="fu">factor</span>(overall_pick))) <span class="sc">+</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Set1"</span>) <span class="sc">+</span>  <span class="co"># Use a qualitative color palette</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Metric, <span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span>  <span class="co"># Create facets for each metric</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Win Shares and Value Over Replacement for Top 5 Overall Picks Over Time"</span>,</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Year"</span>,</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Metric Value"</span>,</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">"Overall Pick"</span>) <span class="sc">+</span></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"right"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The first overall pick doesn’t consistently end up being the best out of their draft class.</p>
+</section>
+</section>
+<section id="total-player-achievements-and-their-draft-team" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="total-player-achievements-and-their-draft-team"><span class="header-section-number">3.3</span> Total Player Achievements and their Draft Team</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>merged_achievement_data <span class="ot">&lt;-</span> <span class="fu">left_join</span>(player_achievements, nbaplayersdraft, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"Player Name"</span> <span class="ot">=</span> <span class="st">"player"</span>))</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>merged_achievement_data <span class="ot">&lt;-</span> merged_achievement_data <span class="sc">%&gt;%</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(team))</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>team_achievements <span class="ot">&lt;-</span> merged_achievement_data <span class="sc">%&gt;%</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(team) <span class="sc">%&gt;%</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">TotalAllStarSelections =</span> <span class="fu">sum</span>(Total_All_Star_Selections, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">TotalAllNBASelections =</span> <span class="fu">sum</span>(Total_All_NBA_Selections, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">TotalChampionships =</span> <span class="fu">sum</span>(Total_Championships, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(TotalAllStarSelections))</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Create separate Cleveland dot plots for each achievement</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>plot1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(team_achievements, <span class="fu">aes</span>(<span class="at">x =</span> TotalAllStarSelections, <span class="at">y =</span> <span class="fu">reorder</span>(team, TotalAllStarSelections))) <span class="sc">+</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Total All-Star Selections per Team"</span>,</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Total All-Star Selections"</span>,</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Team"</span>) <span class="sc">+</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(team_achievements, <span class="fu">aes</span>(<span class="at">x =</span> TotalAllNBASelections, <span class="at">y =</span> <span class="fu">reorder</span>(team, TotalAllNBASelections))) <span class="sc">+</span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Total All-NBA Selections per Team"</span>,</span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Total All-NBA Selections"</span>,</span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Team"</span>) <span class="sc">+</span></span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a>plot3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(team_achievements, <span class="fu">aes</span>(<span class="at">x =</span> TotalChampionships, <span class="at">y =</span> <span class="fu">reorder</span>(team, TotalChampionships))) <span class="sc">+</span></span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Total Championships per Team"</span>,</span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Total Championships"</span>,</span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Team"</span>) <span class="sc">+</span></span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a>plot1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>plot2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid" width="672"></p>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>plot3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-4-3.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="players-performance-and-their-drafted-team" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="players-performance-and-their-drafted-team"><span class="header-section-number">3.3.1</span> Players performance and their drafted team</h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>df_team <span class="ot">&lt;-</span> df_processed <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(team, usg_pct<span class="sc">:</span>ast_pct, field_goal_percentage<span class="sc">:</span>free_throw_percentage)<span class="sc">%&gt;%</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(team)<span class="sc">%&gt;%</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(free_throw_percentage) <span class="sc">%&gt;%</span>  </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">team =</span> <span class="fu">factor</span>(team, <span class="at">levels =</span> team)) <span class="sc">%&gt;%</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span>usg_pct<span class="sc">:</span>free_throw_percentage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Adding missing grouping variables: `player_name`</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: There was 1 warning in `summarise()`.
+ℹ In argument: `across(where(is.numeric), mean, na.rm = TRUE)`.
+ℹ In group 1: `team = "ATL"`.
+Caused by warning:
+! The `...` argument of `across()` is deprecated as of dplyr 1.1.0.
+Supply arguments directly to `.fns` through an anonymous function instead.
+
+  # Previously
+  across(a:b, mean, na.rm = TRUE)
+
+  # Now
+  across(a:b, \(x) mean(x, na.rm = TRUE))</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_team, <span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">y =</span> team, <span class="at">fill=</span>name)) <span class="sc">+</span> </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Team"</span>, <span class="at">x =</span> <span class="st">"Category"</span>)<span class="sc">+</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"blue"</span>, <span class="st">"red"</span>,  <span class="st">"green"</span>, <span class="st">"yellow"</span>, <span class="st">"purple"</span>, <span class="st">"#008080"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>NOH, DET, and BRK teams always choose the players with greater free throw ability. The players chosen by NOK and CHO tend to have low free throw percentage. TOR and MIL are better at choosing players with strong 3 point percentage. Players picked by WSB, LAC, and GSW tend to have low 3 point percentage. NOK teams is likely to choose players with low assist ability. There is no obvious difference among players of teams in field goal, ts and usg. In summary, teams choose the players with different strength, but players picked by NOK tend to weakness in all aspects.</p>
+</section>
+</section>
+<section id="college-draft-targets" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="college-draft-targets"><span class="header-section-number">3.4</span> College Draft Targets</h2>
+<section id="points-rebounds-assists-for-nba-players-from-each-college" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="points-rebounds-assists-for-nba-players-from-each-college"><span class="header-section-number">3.4.1</span> Points, Rebounds, Assists for NBA Players from each College</h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the totals for each metric by college</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>total_stats_by_college <span class="ot">&lt;-</span> nbaplayersdraft <span class="sc">%&gt;%</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(college) <span class="sc">%&gt;%</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_points_per_game =</span> <span class="fu">sum</span>(points_per_game, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_total_rebounds =</span> <span class="fu">sum</span>(average_total_rebounds, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_assists =</span> <span class="fu">sum</span>(average_assists, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(college) <span class="sc">&amp;</span> college <span class="sc">!=</span> <span class="st">""</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to create a Cleveland dot plot for a given metric</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>create_cleveland_plot <span class="ot">&lt;-</span> <span class="cf">function</span>(data, metric, title) {</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  top_colleges <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">top_n</span>(<span class="dv">50</span>, <span class="sc">!!</span><span class="fu">sym</span>(metric))</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(top_colleges, <span class="fu">aes</span>(<span class="at">x =</span> <span class="sc">!!</span><span class="fu">sym</span>(metric), <span class="at">y =</span> <span class="fu">reorder</span>(college, <span class="sc">!!</span><span class="fu">sym</span>(metric)))) <span class="sc">+</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> title, <span class="at">x =</span> <span class="st">"Total"</span>, <span class="at">y =</span> <span class="st">"College"</span>) <span class="sc">+</span></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>plot1 <span class="ot">&lt;-</span> <span class="fu">create_cleveland_plot</span>(total_stats_by_college, <span class="st">"total_points_per_game"</span>, <span class="st">"Top 50 Colleges by Total Points Per Game"</span>)</span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">create_cleveland_plot</span>(total_stats_by_college, <span class="st">"total_total_rebounds"</span>, <span class="st">"Top 50 Colleges by Total Total Rebounds"</span>)</span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>plot3 <span class="ot">&lt;-</span> <span class="fu">create_cleveland_plot</span>(total_stats_by_college, <span class="st">"total_assists"</span>, <span class="st">"Top 50 Colleges by Total Assists"</span>)</span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>plot1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>plot2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid" width="672"></p>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>plot3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-6-3.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="analyze-the-performance-of-players-based-on-their-colleges" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="analyze-the-performance-of-players-based-on-their-colleges"><span class="header-section-number">3.4.2</span> Analyze the performance of players based on their colleges</h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>df_cleve <span class="ot">&lt;-</span> df_processed <span class="sc">%&gt;%</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(college, usg_pct<span class="sc">:</span>ast_pct, field_goal_percentage<span class="sc">:</span>free_throw_percentage)<span class="sc">%&gt;%</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">college =</span> <span class="fu">ifelse</span>(college <span class="sc">==</span> <span class="st">""</span>, <span class="st">"Unknown"</span>, college))<span class="sc">%&gt;%</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(college)<span class="sc">%&gt;%</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">n</span>()<span class="sc">&gt;</span><span class="dv">12</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(free_throw_percentage) <span class="sc">%&gt;%</span>  </span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">college =</span> <span class="fu">factor</span>(college, <span class="at">levels =</span> college)) <span class="sc">%&gt;%</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span>usg_pct<span class="sc">:</span>free_throw_percentage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Adding missing grouping variables: `player_name`</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_cleve, <span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">y =</span> college, <span class="at">fill=</span>name)) <span class="sc">+</span> </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"College"</span>, <span class="at">x =</span> <span class="st">"Category"</span>)<span class="sc">+</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"blue"</span>, <span class="st">"red"</span>,  <span class="st">"green"</span>, <span class="st">"yellow"</span>, <span class="st">"purple"</span>, <span class="st">"#008080"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>To analyze the influence of college in draft, we analyze the players’ performance in assist, field goal, free throw, shooting efficiency, and, team plays. The college will influence the style of the player in the shooting and team plays. This analysis is to find out the styles of players from certain college. To avoid the randomness of the players, we only analyze the colleges with more than 12 players. We noticed that there is significant difference in ts, usg, and field goals. Players from Gonzaga, Villanova, and Oregan tend to have higher free throw percentage, while players from Louisville, Syracuse, and Florida, tend to lower free throw percentage. If NBA team need a player to earn points through free throw, they should pick players from Louisville, Syracuse, and Florida. The players in performance in X_3 point is around the same, except players from Louisville, Florida, Maryland, and LSU. The only two college with outstanding X_3 point are Villanova, and Oregona. If NBA team need a player to earn three points, they should pick players from Villanova, and Oregona, and avoid the four colleges mentioned above. Players from UCLA, Iowa state, and Oregan tend to have higher assist percentage, while players from stanford, Gergetown, and Maryland tend to lower assist percentage (close to 0). If NBA team need a player to earn points through corporation, they should pick players from UCLA, Iowa state, and Oregan. In conclusion, players from Oregona tend to have better performance while players from Maryland perform bad in statistics.</p>
+</section>
+<section id="top-college-targets-for-draft-teams" class="level3" data-number="3.4.3">
+<h3 data-number="3.4.3" class="anchored" data-anchor-id="top-college-targets-for-draft-teams"><span class="header-section-number">3.4.3</span> Top College Targets for Draft Teams</h3>
+<p>These colleges seem to be producing the best NBA players: Kentucky, Duke, UCLA, Arizona, Kansas. Are there team targeting players from these colleges on draft night?</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the dataset for the specified colleges</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>filtered_data <span class="ot">&lt;-</span> nbaplayersdraft <span class="sc">%&gt;%</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(college <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Kentucky"</span>, <span class="st">"Duke"</span>, <span class="st">"UCLA"</span>, <span class="st">"Arizona"</span>, <span class="st">"Kansas"</span>))</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Count the number of players drafted by each team from these colleges</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>team_draft_counts <span class="ot">&lt;-</span> filtered_data <span class="sc">%&gt;%</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(team, college) <span class="sc">%&gt;%</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n))</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a bar plot</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(team_draft_counts, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(team, n), <span class="at">y =</span> n, <span class="at">fill =</span> college)) <span class="sc">+</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"NBA Team Draft Counts from Top 5 Basketball Colleges"</span>,</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Team"</span>,</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Players Drafted"</span>) <span class="sc">+</span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="drafting-based-on-physical-attributes" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="drafting-based-on-physical-attributes"><span class="header-section-number">3.5</span> Drafting Based on Physical Attributes</h2>
+<section id="analyze-the-perfomance-based-on-playerss-height-and-weight" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="analyze-the-perfomance-based-on-playerss-height-and-weight"><span class="header-section-number">3.5.1</span> Analyze the perfomance based on players’s height and weight</h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>df_para <span class="ot">&lt;-</span> df_processed[, <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">6</span><span class="sc">:</span><span class="dv">11</span>, <span class="dv">22</span><span class="sc">:</span><span class="dv">34</span>)]</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>df_related <span class="ot">&lt;-</span> df_para[, <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>, <span class="dv">4</span>,<span class="dv">5</span>, <span class="dv">8</span>,<span class="dv">12</span>, <span class="dv">16</span>, <span class="dv">17</span>)]</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggpairs</span>(df_related,</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">lower =</span> <span class="fu">list</span>(<span class="at">continuous =</span> <span class="fu">wrap</span>(<span class="st">"points"</span>, <span class="at">alpha =</span> <span class="fl">0.1</span>, <span class="at">size=</span><span class="fl">0.2</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>cor_matrix <span class="ot">&lt;-</span> <span class="fu">cor</span>(df_para)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(cor_matrix )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>                          player_height player_weight total_pointdiff
+player_height               1.000000000   0.810016717    -0.005902881
+player_weight               0.810016717   1.000000000     0.002070306
+total_pointdiff            -0.005902881   0.002070306     1.000000000
+off_rebound                 0.657602711   0.676755846    -0.014963783
+def_rebound                 0.687000298   0.660634041     0.043594543
+usg_pct                    -0.177007446  -0.121910583     0.110216090
+ts_pct                      0.060064828   0.074487565     0.127980238
+ast_pct                    -0.682438903  -0.589578068     0.166197104
+minutes_played             -0.009102132   0.041667077     0.412231159
+points                     -0.020820120   0.031342876     0.446122937
+total_rebounds              0.256355230   0.297859861     0.395999191
+assists                    -0.276795907  -0.206810978     0.438016857
+field_goal_percentage       0.286714312   0.305856504     0.078994244
+X3_point_percentage        -0.403593505  -0.430280295     0.055997475
+free_throw_percentage      -0.277206893  -0.256504924     0.062979894
+average_minutes_played     -0.087874633  -0.055714515     0.250855082
+points_per_game            -0.091299076  -0.051055317     0.290411245
+average_total_rebounds      0.439650757   0.451872024     0.226797081
+average_assists            -0.490414663  -0.418402393     0.285238072
+win_shares                  0.054393013   0.097492868     0.594317191
+win_shares_per_48_minutes   0.107304038   0.137777574     0.254973945
+                          off_rebound def_rebound      usg_pct     ts_pct
+player_height              0.65760271  0.68700030 -0.177007446 0.06006483
+player_weight              0.67675585  0.66063404 -0.121910583 0.07448756
+total_pointdiff           -0.01496378  0.04359454  0.110216090 0.12798024
+off_rebound                1.00000000  0.66778593 -0.180789738 0.04994140
+def_rebound                0.66778593  1.00000000 -0.045259902 0.19617992
+usg_pct                   -0.18078974 -0.04525990  1.000000000 0.05445014
+ts_pct                     0.04994140  0.19617992  0.054450142 1.00000000
+ast_pct                   -0.51421487 -0.41312366  0.384755563 0.09705681
+minutes_played            -0.05290260  0.11541280  0.308357183 0.27084245
+points                    -0.07785205  0.10274360  0.446422152 0.26796193
+total_rebounds             0.22632218  0.41700024  0.229947835 0.27009911
+assists                   -0.23193283 -0.09540154  0.344163015 0.18160387
+field_goal_percentage      0.35949338  0.36972601 -0.022210944 0.77667573
+X3_point_percentage       -0.54066280 -0.35885339  0.221761606 0.28504863
+free_throw_percentage     -0.30857323 -0.14840732  0.228140330 0.40077919
+average_minutes_played    -0.16927890  0.05387397  0.346894711 0.39055367
+points_per_game           -0.17707887  0.04901182  0.589341715 0.39305873
+average_total_rebounds     0.41600309  0.64383238  0.174900774 0.37568287
+average_assists           -0.41333046 -0.25168385  0.402747683 0.20115935
+win_shares                 0.03016303  0.20170490  0.318168900 0.29002571
+win_shares_per_48_minutes  0.19027493  0.24903569  0.003837843 0.75201904
+                              ast_pct minutes_played      points total_rebounds
+player_height             -0.68243890   -0.009102132 -0.02082012     0.25635523
+player_weight             -0.58957807    0.041667077  0.03134288     0.29785986
+total_pointdiff            0.16619710    0.412231159  0.44612294     0.39599919
+off_rebound               -0.51421487   -0.052902599 -0.07785205     0.22632218
+def_rebound               -0.41312366    0.115412803  0.10274360     0.41700024
+usg_pct                    0.38475556    0.308357183  0.44642215     0.22994784
+ts_pct                     0.09705681    0.270842455  0.26796193     0.27009911
+ast_pct                    1.00000000    0.255019943  0.28300863     0.03675895
+minutes_played             0.25501994    1.000000000  0.95897535     0.86783533
+points                     0.28300863    0.958975354  1.00000000     0.83044962
+total_rebounds             0.03675895    0.867835328  0.83044962     1.00000000
+assists                    0.56649552    0.817810469  0.81566452     0.55978719
+field_goal_percentage     -0.07915255    0.215765604  0.19822690     0.31046511
+X3_point_percentage        0.35842417    0.230699638  0.24424883     0.04234180
+free_throw_percentage      0.26209596    0.274457652  0.27964234     0.13318831
+average_minutes_played     0.31616812    0.787021932  0.76844385     0.66331896
+points_per_game            0.34506917    0.733432288  0.80896726     0.61762791
+average_total_rebounds    -0.10755057    0.579292075  0.56107344     0.80052909
+average_assists            0.81053547    0.564323653  0.58141373     0.31355800
+win_shares                 0.23260096    0.922723107  0.93912252     0.87913134
+win_shares_per_48_minutes  0.11768497    0.402856264  0.39462362     0.41665097
+                              assists field_goal_percentage X3_point_percentage
+player_height             -0.27679591           0.286714312        -0.403593505
+player_weight             -0.20681098           0.305856504        -0.430280295
+total_pointdiff            0.43801686           0.078994244         0.055997475
+off_rebound               -0.23193283           0.359493378        -0.540662795
+def_rebound               -0.09540154           0.369726012        -0.358853389
+usg_pct                    0.34416301          -0.022210944         0.221761606
+ts_pct                     0.18160387           0.776675727         0.285048626
+ast_pct                    0.56649552          -0.079152549         0.358424170
+minutes_played             0.81781047           0.215765604         0.230699638
+points                     0.81566452           0.198226897         0.244248834
+total_rebounds             0.55978719           0.310465111         0.042341803
+assists                    1.00000000           0.086187392         0.263607089
+field_goal_percentage      0.08618739           1.000000000         0.004379196
+X3_point_percentage        0.26360709           0.004379196         1.000000000
+free_throw_percentage      0.26680586           0.090102193         0.440507811
+average_minutes_played     0.65289474           0.289054979         0.374135755
+points_per_game            0.64142967           0.274080648         0.379534010
+average_total_rebounds     0.29540788           0.472159362        -0.024162933
+average_assists            0.82077667           0.046313381         0.377071150
+win_shares                 0.78579829           0.247216749         0.160403313
+win_shares_per_48_minutes  0.30447327           0.725075530         0.224957358
+                          free_throw_percentage average_minutes_played
+player_height                       -0.27720689            -0.08787463
+player_weight                       -0.25650492            -0.05571452
+total_pointdiff                      0.06297989             0.25085508
+off_rebound                         -0.30857323            -0.16927890
+def_rebound                         -0.14840732             0.05387397
+usg_pct                              0.22814033             0.34689471
+ts_pct                               0.40077919             0.39055367
+ast_pct                              0.26209596             0.31616812
+minutes_played                       0.27445765             0.78702193
+points                               0.27964234             0.76844385
+total_rebounds                       0.13318831             0.66331896
+assists                              0.26680586             0.65289474
+field_goal_percentage                0.09010219             0.28905498
+X3_point_percentage                  0.44050781             0.37413575
+free_throw_percentage                1.00000000             0.41623201
+average_minutes_played               0.41623201             1.00000000
+points_per_game                      0.40485168             0.91752846
+average_total_rebounds               0.10605557             0.68627605
+average_assists                      0.34294840             0.69824477
+win_shares                           0.21843679             0.68681827
+win_shares_per_48_minutes            0.33605870             0.43227808
+                          points_per_game average_total_rebounds
+player_height                 -0.09129908             0.43965076
+player_weight                 -0.05105532             0.45187202
+total_pointdiff                0.29041124             0.22679708
+off_rebound                   -0.17707887             0.41600309
+def_rebound                    0.04901182             0.64383238
+usg_pct                        0.58934171             0.17490077
+ts_pct                         0.39305873             0.37568287
+ast_pct                        0.34506917            -0.10755057
+minutes_played                 0.73343229             0.57929208
+points                         0.80896726             0.56107344
+total_rebounds                 0.61762791             0.80052909
+assists                        0.64142967             0.29540788
+field_goal_percentage          0.27408065             0.47215936
+X3_point_percentage            0.37953401            -0.02416293
+free_throw_percentage          0.40485168             0.10605557
+average_minutes_played         0.91752846             0.68627605
+points_per_game                1.00000000             0.63650742
+average_total_rebounds         0.63650742             1.00000000
+average_assists                0.68958754             0.22670027
+win_shares                     0.69859653             0.60836229
+win_shares_per_48_minutes      0.43061313             0.47460701
+                          average_assists win_shares win_shares_per_48_minutes
+player_height                 -0.49041466 0.05439301               0.107304038
+player_weight                 -0.41840239 0.09749287               0.137777574
+total_pointdiff                0.28523807 0.59431719               0.254973945
+off_rebound                   -0.41333046 0.03016303               0.190274929
+def_rebound                   -0.25168385 0.20170490               0.249035688
+usg_pct                        0.40274768 0.31816890               0.003837843
+ts_pct                         0.20115935 0.29002571               0.752019045
+ast_pct                        0.81053547 0.23260096               0.117684968
+minutes_played                 0.56432365 0.92272311               0.402856264
+points                         0.58141373 0.93912252               0.394623622
+total_rebounds                 0.31355800 0.87913134               0.416650967
+assists                        0.82077667 0.78579829               0.304473270
+field_goal_percentage          0.04631338 0.24721675               0.725075530
+X3_point_percentage            0.37707115 0.16040331               0.224957358
+free_throw_percentage          0.34294840 0.21843679               0.336058701
+average_minutes_played         0.69824477 0.68681827               0.432278083
+points_per_game                0.68958754 0.69859653               0.430613134
+average_total_rebounds         0.22670027 0.60836229               0.474607007
+average_assists                1.00000000 0.51358278               0.251153949
+win_shares                     0.51358278 1.00000000               0.443410965
+win_shares_per_48_minutes      0.25115395 0.44341097               1.000000000</code></pre>
+</div>
+</div>
+<p>To analyze the factor of weight and height in drafting. We first analyzed the correlation matrix of the height and weight to the other performance statistics. It is reasonable that height and weight are highly correlated and statistics about rebound, assist, and X_3 points have high absolute value of correlation score with height and weight. Then, we analyze the pair plot of these variables. The distribution of performance variables are all positive skewed, while the distribution of height and weight are close to the normal distribution. The scatter plot of height and weight with performance statistics are almost the same. We have the same conclusion for them. The different thing is height plot tend to have grid shape, which may caused by players tend to round up their height to integer. Statistics about rebound are positive related to the height weight, Players with high weight and height tend to have larger variance in the rebound statistics, whereas player with low weight and height has lower variance. We can draw the following conclusion that if the team need to strength their rebound aspects, they should absolutely draw players with high height and weight, but these players may not get enough rebound in the match.The similar things happen to the assist statistics. Assist statistics are negatively correlated to the height and weight. Players with high weight and height tend to have lower variance in the assist statistics, whereas player with low weight and height has higher variance. If a team need to strength their team corporation(assist), they should absolutely draw players with low height and weight, but these players may not assist enough in the match. We also discover that the variance difference is more obvious in the average assist, but less in assist percentage(Percentage of teammate field goals the player assisted).</p>
+</section>
+<section id="analyze-the-weight-and-height-of-players-over-time" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="analyze-the-weight-and-height-of-players-over-time"><span class="header-section-number">3.5.2</span> Analyze the weight and height of players over time</h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("ggforce")</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggforce)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>df_overtime <span class="ot">&lt;-</span> df_processed<span class="sc">%&gt;%</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(draft_round <span class="sc">==</span><span class="dv">1</span>)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>p<span class="ot">&lt;-</span><span class="fu">ggplot</span>(df_overtime, <span class="fu">aes</span>(<span class="at">x =</span> player_height, <span class="at">y =</span> player_weight)) <span class="sc">+</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hex</span>(<span class="at">bins =</span> <span class="dv">10</span>)</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_point(alpha=0.3, size=1) +</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Height"</span>, <span class="at">y =</span> <span class="st">"Weight"</span>, <span class="at">title =</span> <span class="st">"Scatter plot by Draft Year"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>$x
+[1] "Height"
+
+$y
+[1] "Weight"
+
+$title
+[1] "Scatter plot by Draft Year"
+
+attr(,"class")
+[1] "labels"</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>, <span class="dv">3</span>)){</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">facet_wrap_paginate</span>(<span class="sc">~</span>draft_year, <span class="at">ncol =</span> <span class="dv">4</span>, <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">page =</span> n)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(p)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-10-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-10-3.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>To analyze the draft preference of NBA team, facet the heatmap by draft year. We filter the players in the first draft round, to reflect the NBA preference. The general shape is linear relationship with height(180-220) and weight(80-130). However, there is difference in draft preference. In 1991, 1995, 2006, and 2012, NBA teams prefers players with larger height and weight. In 1994, 2006, 2011,2019，and, 2021, NBA teams prefer players with smaller height and weight. In 2012, 2017,and 2018, NBA teams prefer players with large height or small height. The preference doe not last long for years and we cannot derive any conclusion from this. However, players whose height is around 210 or 190, with corresponding weight of 120 or 80, are overall preferred to be selected.</p>
+</section>
+<section id="analyze-the-perfomance-difference-bwtween-american-and-non-american-players" class="level3" data-number="3.5.3">
+<h3 data-number="3.5.3" class="anchored" data-anchor-id="analyze-the-perfomance-difference-bwtween-american-and-non-american-players"><span class="header-section-number">3.5.3</span> Analyze the perfomance difference bwtween American and non-American players</h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>df_origin <span class="ot">&lt;-</span> df_processed <span class="sc">%&gt;%</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">country =</span> <span class="fu">ifelse</span>(country <span class="sc">==</span> <span class="st">"USA"</span>, <span class="st">"USA"</span>,<span class="st">"non-American"</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country)<span class="sc">%&gt;%</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country,usg_pct<span class="sc">:</span>ast_pct, field_goal_percentage<span class="sc">:</span>free_throw_percentage)<span class="sc">%&gt;%</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lapply</span>(<span class="cf">function</span>(x) <span class="cf">if</span>(<span class="fu">is.numeric</span>(x)) x <span class="sc">/</span> x[<span class="dv">1</span>] <span class="cf">else</span> x) <span class="sc">%&gt;%</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()<span class="sc">%&gt;%</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> usg_pct<span class="sc">:</span>free_throw_percentage, <span class="at">names_to =</span> <span class="st">"statistics"</span> )</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_origin, <span class="fu">aes</span>(statistics, value, <span class="at">fill =</span> country))<span class="sc">+</span></span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>, <span class="at">position =</span> <span class="fu">position_dodge</span>())<span class="sc">+</span></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust=</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The overall performance of non-American players is slightly worse than that of American player. The obvious difference between american player and non-american player is assist percentage. The assist percentage of non-american player is 20% lower than that of american player. Non-american did not show any adapting problem in playing in NBA. Drafting american players will not be a better choice.</p>
+</section>
+<section id="ptional" class="level3" data-number="3.5.4">
+<h3 data-number="3.5.4" class="anchored" data-anchor-id="ptional"><span class="header-section-number">3.5.4</span> 0ptional</h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>df_draft <span class="ot">&lt;-</span>df_processed <span class="sc">%&gt;%</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(draft_round)<span class="sc">%&gt;%</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(draft_round, average_total_rebounds<span class="sc">:</span>win_shares)<span class="sc">%&gt;%</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span>average_total_rebounds<span class="sc">:</span>win_shares)</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>df_draft<span class="sc">$</span>draft_round<span class="ot">&lt;-</span><span class="fu">as.character</span>(df_draft<span class="sc">$</span>draft_round)</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_draft, <span class="fu">aes</span>(<span class="at">x=</span>name, <span class="at">y=</span>value, <span class="at">fill=</span>draft_round))<span class="sc">+</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>, <span class="at">position =</span> <span class="fu">position_dodge</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -417,7 +1212,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/dongyiran2730/EDAV-final-project/edit/main/results.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/dongyiran2730/EDAV-final-project/issues/new" class="toc-action">Report an issue</a></p></div></div></div>
+    </div>
     <div class="nav-footer-right">This book was built with <a href="https://quarto.org/">Quarto</a>.</div>
   </div>
 </footer>
