@@ -1,4 +1,52 @@
 # Results
+
+## Teams Drafting High Achieving Players
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(readr)
+
+player_achievements <- read_csv("player_achievements.csv")
+nbaplayersdraft <- read_csv("nbaplayersdraft.csv")
+merged_data <- left_join(player_achievements, nbaplayersdraft, by = c("Player Name" = "player"))
+
+filtered_data <- merged_data %>%
+  filter(!is.na(team))
+
+team_achievements <- filtered_data %>%
+  group_by(team) %>%
+  summarise(
+    TotalAllStarSelections = sum(Total_All_Star_Selections, na.rm = TRUE),
+    TotalAllNBASelections = sum(Total_All_NBA_Selections, na.rm = TRUE),
+    TotalChampionships = sum(Total_Championships, na.rm = TRUE)
+  ) %>%
+  arrange(desc(TotalAllStarSelections))
+
+long_achievements <- tidyr::pivot_longer(
+  team_achievements,
+  cols = c("TotalAllStarSelections", "TotalAllNBASelections", "TotalChampionships"),
+  names_to = "Achievement",
+  values_to = "Total"
+)
+
+ggplot(long_achievements, aes(x = reorder(team, -Total), y = Total, fill = Achievement)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~Achievement, scales = "free_y", nrow = 3) +
+  theme_minimal() +
+  labs(title = "Total NBA Achievements per Team",
+       x = "Team",
+       y = "Total") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  theme(legend.position = "bottom")
+
+```
+
+
+
+
+## Drafting Based on Physical Attributes
+
 ```{r}
 #install.packages("GGally")
 library(GGally)
