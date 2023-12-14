@@ -161,15 +161,38 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 <style>
-  * {
-    font-family: sans-serif;
+  .axis path,
+  .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+  }
+  .axis text {
+      font-family: sans-serif;
+      font-size: 11px;
+  }
+  .scatter {
+      fill: steelblue;
   }
 </style>
 <div id="plot">
 
 </div>
+<svg id="scatterplot" width="800" height="400">
+</svg>
+<svg id="slider-container" width="800" height="100">
+</svg>
+<div id="tooltip" style="position: absolute; opacity: 0; pointer-events: none; background-color: white; padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
+
+</div>
+<p>
+</p>
+<p>
+Win Shares is an advanced player statistic which attempts to divvy up credit for team success to the individuals on the team. This interactive graph allows you to view win shares of the draft class each year and hover over the data points to view more player information. You can notice some years where the first overall pick doesn’t always end up being the best player from that draft class such as Kevin Durant who was drafted 2nd in the 2007 draft. Also, there are players who are drafted much later (&gt;30) and end up being more “winning” players than players picked earlier such as Nikola Jokic who was drafted 41st in the 2014 draft.
+</p>
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="scripts/myscript.js"></script>
+<script src="https://d3js.org/d3.v6.min.js"></script>
 
 
 
