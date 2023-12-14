@@ -65,10 +65,13 @@ d1 <- data1 %>%
     ts_pct= sum(ts_pct*gp)/total_game,
     ast_pct = sum(ast_pct*gp)/total_game,
     country = first(country),
-    draft_round = first(draft_round)
+    draft_round = first(draft_round),
+    draft_year = first(draft_year)
   ) 
-d1$'draft_round'[df$'draft_round' == "Undrafted"] <- "0"
+d1$'draft_round'[d1$'draft_round' == "Undrafted"] <- "0"
 d1$'draft_round' = as.numeric(d1$'draft_round')
+d1$'draft_year'[d1$'draft_year' == "Undrafted"] <- "0"
+d1$'draft_year' = as.numeric(d1$'draft_year')
 data2$"overall_pick" = as.character(data2$"overall_pick")
 df <- inner_join(d1, data2, by = c("player_name" = "player_name", "draft_number" = "overall_pick"))
 ```
