@@ -304,7 +304,7 @@ df_related <- df_para[, c(1,2, 4,5, 8,12, 16, 17)]
 
 
 ggpairs(df_related,
-        lower = list(continuous = wrap("points", alpha = 0.1, size=0.2)))
+        lower = list(continuous = wrap("points", alpha = 0.1, size = 0.2)))
 
 
 cor_matrix <- cor(df_para)
