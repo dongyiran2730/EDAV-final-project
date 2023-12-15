@@ -187,6 +187,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#missing-value-analysis" id="toc-missing-value-analysis" class="nav-link" data-scroll-target="#missing-value-analysis"><span class="header-section-number">2.3</span> Missing value analysis</a>
   <ul class="collapse">
   <li><a href="#data-preprocess" id="toc-data-preprocess" class="nav-link" data-scroll-target="#data-preprocess"><span class="header-section-number">2.3.1</span> Data Preprocess</a></li>
+  <li><a href="#missing-plot-analysis" id="toc-missing-plot-analysis" class="nav-link" data-scroll-target="#missing-plot-analysis"><span class="header-section-number">2.3.2</span> Missing plot analysis</a></li>
+  <li><a href="#analysis-the-relationship-betwen-na-counts-and" id="toc-analysis-the-relationship-betwen-na-counts-and" class="nav-link" data-scroll-target="#analysis-the-relationship-betwen-na-counts-and"><span class="header-section-number">2.3.3</span> Analysis the relationship betwen na counts and</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/dongyiran2730/EDAV-final-project/edit/main/data.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/dongyiran2730/EDAV-final-project/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
@@ -304,62 +306,34 @@ Attaching package: 'dplyr'</code></pre>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">ast_pct =</span> <span class="fu">sum</span>(ast_pct<span class="sc">*</span>gp)<span class="sc">/</span>total_game,</span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">country =</span> <span class="fu">first</span>(country),</span>
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">draft_round =</span> <span class="fu">first</span>(draft_round),</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">draft_year =</span> <span class="fu">first</span>(draft_year)</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>`summarise()` has grouped output by 'player_name'. You can override using the
-`.groups` argument.</code></pre>
-</div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>d1<span class="sc">$</span><span class="st">'draft_round'</span>[d1<span class="sc">$</span><span class="st">'draft_round'</span> <span class="sc">==</span> <span class="st">"Undrafted"</span>] <span class="ot">&lt;-</span> <span class="st">"0"</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>d1<span class="sc">$</span><span class="st">'draft_round'</span> <span class="ot">=</span> <span class="fu">as.numeric</span>(d1<span class="sc">$</span><span class="st">'draft_round'</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>d1<span class="sc">$</span><span class="st">'draft_year'</span>[d1<span class="sc">$</span><span class="st">'draft_year'</span> <span class="sc">==</span> <span class="st">"Undrafted"</span>] <span class="ot">&lt;-</span> <span class="st">"0"</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>d1<span class="sc">$</span><span class="st">'draft_year'</span> <span class="ot">=</span> <span class="fu">as.numeric</span>(d1<span class="sc">$</span><span class="st">'draft_year'</span>)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>data2<span class="sc">$</span><span class="st">"overall_pick"</span> <span class="ot">=</span> <span class="fu">as.character</span>(data2<span class="sc">$</span><span class="st">"overall_pick"</span>)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(d1, data2, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"player_name"</span> <span class="ot">=</span> <span class="st">"player_name"</span>, <span class="st">"draft_number"</span> <span class="ot">=</span> <span class="st">"overall_pick"</span>))</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">left_join</span>(df, data3, <span class="at">by =</span> <span class="fu">c</span> (<span class="st">"player_name"</span> <span class="ot">=</span> <span class="st">"Player.Name"</span>))</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">names</span>(df))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code> [1] "player_name"               "draft_number"             
- [3] "player_height"             "player_weight"            
- [5] "total_game"                "total_pointdiff"          
- [7] "off_rebound"               "def_rebound"              
- [9] "usg_pct"                   "ts_pct"                   
-[11] "ast_pct"                   "country"                  
-[13] "draft_round"               "draft_year"               
-[15] "id"                        "year"                     
-[17] "rank"                      "team"                     
-[19] "college"                   "years_active"             
-[21] "games"                     "minutes_played"           
-[23] "points"                    "total_rebounds"           
-[25] "assists"                   "field_goal_percentage"    
-[27] "X3_point_percentage"       "free_throw_percentage"    
-[29] "average_minutes_played"    "points_per_game"          
-[31] "average_total_rebounds"    "average_assists"          
-[33] "win_shares"                "win_shares_per_48_minutes"
-[35] "box_plus_minus"            "value_over_replacement"   
-[37] "Total_All_Star_Selections" "Total_All_NBA_Selections" 
-[39] "Total_Championships"      </code></pre>
-</div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">Total.All.Star.Selections =</span> <span class="fu">replace</span>(Total_All_Star_Selections, <span class="fu">is.na</span>(Total_All_Star_Selections), <span class="dv">0</span>),</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Total.All.NBA.Selections =</span> <span class="fu">replace</span>(Total_All_NBA_Selections, <span class="fu">is.na</span>(Total_All_NBA_Selections), <span class="dv">0</span>),</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Total.Championships =</span> <span class="fu">replace</span>(Total_Championships, <span class="fu">is.na</span>(Total_Championships), <span class="dv">0</span>)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">draft_year =</span> <span class="fu">first</span>(draft_year),</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>d1<span class="sc">$</span><span class="st">'draft_round'</span>[d1<span class="sc">$</span><span class="st">'draft_round'</span> <span class="sc">==</span> <span class="st">"Undrafted"</span>] <span class="ot">&lt;-</span> <span class="st">"0"</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>d1<span class="sc">$</span><span class="st">'draft_round'</span> <span class="ot">=</span> <span class="fu">as.numeric</span>(d1<span class="sc">$</span><span class="st">'draft_round'</span>)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>d1<span class="sc">$</span><span class="st">'draft_year'</span>[d1<span class="sc">$</span><span class="st">'draft_year'</span> <span class="sc">==</span> <span class="st">"Undrafted"</span>] <span class="ot">&lt;-</span> <span class="st">"0"</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>d1<span class="sc">$</span><span class="st">'draft_year'</span> <span class="ot">=</span> <span class="fu">as.numeric</span>(d1<span class="sc">$</span><span class="st">'draft_year'</span>)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>data2<span class="sc">$</span><span class="st">"overall_pick"</span> <span class="ot">=</span> <span class="fu">as.character</span>(data2<span class="sc">$</span><span class="st">"overall_pick"</span>)</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(d1, data2, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"player_name"</span> <span class="ot">=</span> <span class="st">"player_name"</span>, <span class="st">"draft_number"</span> <span class="ot">=</span> <span class="st">"overall_pick"</span>))</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">left_join</span>(df, data3, <span class="at">by =</span> <span class="fu">c</span> (<span class="st">"player_name"</span> <span class="ot">=</span> <span class="st">"Player.Name"</span>))</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">Total.All.Star.Selections =</span> <span class="fu">replace</span>(Total_All_Star_Selections, <span class="fu">is.na</span>(Total_All_Star_Selections), <span class="dv">0</span>),</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">Total.All.NBA.Selections =</span> <span class="fu">replace</span>(Total_All_NBA_Selections, <span class="fu">is.na</span>(Total_All_NBA_Selections), <span class="dv">0</span>),</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">Total.Championships =</span> <span class="fu">replace</span>(Total_Championships, <span class="fu">is.na</span>(Total_Championships), <span class="dv">0</span>)</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+</section>
+<section id="missing-plot-analysis" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="missing-plot-analysis"><span class="header-section-number">2.3.2</span> Missing plot analysis</h3>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>miss_df <span class="ot">&lt;-</span> <span class="fu">colSums</span>(<span class="fu">is.na</span>(df))  <span class="sc">|&gt;</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="at">decreasing=</span><span class="cn">TRUE</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(miss_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>miss_df <span class="ot">&lt;-</span> <span class="fu">colSums</span>(<span class="fu">is.na</span>(df))  <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="at">decreasing=</span><span class="cn">TRUE</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(miss_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Total_All_Star_Selections  Total_All_NBA_Selections       Total_Championships 
@@ -393,8 +367,8 @@ Total.All.Star.Selections  Total.All.NBA.Selections       Total.Championships
 </div>
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("mi")</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("mi")</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: Matrix</code></pre>
@@ -422,10 +396,10 @@ Total.All.Star.Selections  Total.All.NBA.Selections       Total.Championships
 </div>
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(remotes)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co">#remotes::install_github("jtr13/redav")</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(redav)</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_missing</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(remotes)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">#remotes::install_github("jtr13/redav")</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(redav)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_missing</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>Scale for y is already present.
@@ -441,16 +415,19 @@ Adding another scale for y, which will replace the existing scale.</code></pre>
 </div>
 <p>From the print result, we can see that the column with the most missing values is “3_point_percentage” (6%), and “free_throw_percentage” has 27 missing values, accounting for 1.9% of the total data. A few other columns have fewer than 10 missing values each. The missing values only account for a small percentage of the total data. When examining the missing value pattern from the graph above, we discover that over 90% of the rows are complete, and the most common missing pattern is the absence of data in the “X3_point_percentage” column.</p>
 <p>We have observed that there are zeros in columns such as “3_point_percentage” and “free_throw_percentage,” so “na” does not indicate that the player did not score 3 points or did not earn free throw points. Instead, it is not recorded due to unknown factors or data loss on the website. We have verified this data on the original website (https://www.basketball-reference.com/), where it is also not recorded. Additionally, we have noticed that missing values in one column are correlated with missing values in another column. Otherwise, the missing pattern would be a single missing value in each row. We will investigate this further in the following graph. There are also two players with a significant amount of missing data.</p>
+</section>
+<section id="analysis-the-relationship-betwen-na-counts-and" class="level3" data-number="2.3.3">
+<h3 data-number="2.3.3" class="anchored" data-anchor-id="analysis-the-relationship-betwen-na-counts-and"><span class="header-section-number">2.3.3</span> Analysis the relationship betwen na counts and</h3>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ✔ forcats   1.0.0     ✔ readr     2.1.4
-✔ ggplot2   3.4.4     ✔ stringr   1.5.0
-✔ lubridate 1.9.2     ✔ tibble    3.2.1
+✔ ggplot2   3.4.4     ✔ stringr   1.5.1
+✔ lubridate 1.9.3     ✔ tibble    3.2.1
 ✔ purrr     1.0.2     ✔ tidyr     1.3.0
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ✖ tidyr::complete() masks mi::complete()
@@ -463,11 +440,11 @@ Adding another scale for y, which will replace the existing scale.</code></pre>
 </div>
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>na_count <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(<span class="fu">is.na</span>(df))</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>draft_number <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(df<span class="sc">$</span>draft_number)</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(total_game, na_count))<span class="sc">+</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Relationship between na_counts and total game"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>na_count <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(<span class="fu">is.na</span>(df))</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>draft_number <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(df<span class="sc">$</span>draft_number)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(total_game, na_count))<span class="sc">+</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Relationship between na_counts and total game"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="data_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
