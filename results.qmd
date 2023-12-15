@@ -1,72 +1,91 @@
 # Results
-Draft pick numbers generally give an idea of a player's potential, particularly among the top 10 picks. However, it's not a hard rule that players with higher pick numbers are superior in all aspects, like value and win shares, compared to those with lower pick numbers. There's no strong correlation between skill in drafting top players and winning championships. Notably, players from Oregon and Kentucky universities often excel in the NBA, whereas those from Maryland University typically underperform. Physically larger players, with more height and weight, tend to score higher in rebounds, while smaller players often achieve higher assist scores. NBA teams frequently opt for players around 210 cm and 120 kg or those closer to 190 cm and 80 kg. Also, non-American players usually adapt well to the NBA without significant issues.
+
+## Overview
+
+Draft pick numbers generally give an idea of a player's potential, particularly among the top 10 picks. However, it's not a hard rule that players with higher pick numbers are superior in all aspects, especially looking at advanced NBA metrics, compared to those with lower pick numbers. There are certain teams that clearly drafted high-achieving players that have either eventually been acknowledged for their skill or have won multiple championships like the Seattle SuperSonics, Orlando Magic, Golden State Warriors, and Cleveland Cavaliers. Notably, players from Oregon and Kentucky universities often excel in the NBA and these colleges are amongst others that are often targets during the draft. As one would expect, we found that physically larger players, with more height and weight, tend to score higher in rebounds, while smaller players often achieve higher assist scores. NBA teams frequently opt for players around 210 cm and 120 kg or those closer to 190 cm and 80 kg. Lastly, non-American players usually adapt well to the NBA without significant issues.
 
 ## Data Preprocess
+
 ```{r}
-#install.packages("dplyr")
-#install.packages("GGally")
-#install.packages("readr")
+# install.packages("dplyr")
+# install.packages("GGally")
+# install.packages("readr")
+# install.packages("ggplot2")
+# install.packages("tidyr")
+
 library(dplyr)
 library(GGally)
 library(readr)
+library(ggplot2)
+library(tidyr)
 
-data1 <- read.csv("all_seasons.csv")
-data2 <- read.csv("nbaplayersdraft.csv")
-data3 <- read.csv("player_achievements.csv")
-data2 <- rename(data2, player_name = player)
-d1 <- data1 %>%
+
+# Read in the three datasets
+general_player_data <- read.csv("all_seasons.csv")
+draft_player_data <- read.csv("nbaplayersdraft.csv")
+player_achievements_data <- read.csv("player_achievements.csv")
+
+# Rename the 'player' column in draft_player_data to 'player_name' for consistency
+draft_player_data <- rename(draft_player_data, player_name = player)
+
+# Data preprocessing for general_player_data
+general_player_data <- general_player_data %>%
   group_by(player_name, draft_number) %>%
   summarise(
     player_height = mean(player_height),
     player_weight = mean(player_weight),
     total_game = sum(gp),
     total_pointdiff = sum(net_rating * gp),
-    off_rebound = sum(oreb_pct*gp)/total_game,
-    def_rebound = sum(dreb_pct*gp)/total_game,
-    usg_pct = sum(usg_pct*gp)/total_game,
-    ts_pct= sum(ts_pct*gp)/total_game,
-    ast_pct = sum(ast_pct*gp)/total_game,
+    off_rebound = sum(oreb_pct * gp) / total_game,
+    def_rebound = sum(dreb_pct * gp) / total_game,
+    usg_pct = sum(usg_pct * gp) / total_game,
+    ts_pct = sum(ts_pct * gp) / total_game,
+    ast_pct = sum(ast_pct * gp) / total_game,
     country = first(country),
     draft_round = first(draft_round),
-    draft_year = first(draft_year),
-    .groups = "drop"
+    draft_year = first(draft_year)
   ) 
-d1$'draft_round'[d1$'draft_round' == "Undrafted"] <- "0"
-d1$'draft_round' = as.numeric(d1$'draft_round')
-d1$'draft_year'[d1$'draft_year' == "Undrafted"] <- "0"
-d1$'draft_year' = as.numeric(d1$'draft_year')
-data2$"overall_pick" = as.character(data2$"overall_pick")
-df <- inner_join(d1, data2, by = c("player_name" = "player_name", "draft_number" = "overall_pick"))
-df <- left_join(df, data3, by = c ("player_name" = "Player.Name"))
 
+# Handle "Undrafted" values in 'draft_round' and 'draft_year'
+general_player_data$draft_round[general_player_data$draft_round == "Undrafted"] <- "0"
+general_player_data$draft_round <- as.numeric(general_player_data$draft_round)
+general_player_data$draft_year[general_player_data$draft_year == "Undrafted"] <- "0"
+general_player_data$draft_year <- as.numeric(general_player_data$draft_year)
+
+# Merge data
+draft_player_data$"overall_pick" <- as.character(draft_player_data$"overall_pick")
+df <- inner_join(general_player_data, draft_player_data, by = c("player_name" = "player_name", "draft_number" = "overall_pick"))
+df <- left_join(df, player_achievements_data, by = c("player_name" = "Player.Name"))
+
+# Replace missing values in specific columns with 0
 df <- df %>%
   mutate(
     Total_All_Star_Selections = replace(Total_All_Star_Selections, is.na(Total_All_Star_Selections), 0),
     Total_All_NBA_Selections = replace(Total_All_NBA_Selections, is.na(Total_All_NBA_Selections), 0),
     Total_Championships = replace(Total_Championships, is.na(Total_Championships), 0)
   )
-df$na_count <- rowSums(is.na(df))
+
+# Convert 'draft_number' to numeric
 df$draft_number <- as.numeric(df$draft_number)
 
+# Missing data handling and generate general dataset for analysis
+df$na_count <- rowSums(is.na(df))
 df_1 <- df[rowSums(is.na(df)) <= 10, ]
-df_processed <- df_1 %>%
+player_data <- df_1 %>%
   mutate_if(is.numeric, ~ifelse(is.na(.), 0, .))
 
 ```
+
 ## Overall Draft Analysis
 
 ### Points, Assists, Rebounds, Win Shares vs Pick Number (1-60)
 
 ```{r}
-library(tidyr)
-
-player_achievements <- read_csv("player_achievements.csv")
-nbaplayersdraft <- read_csv("nbaplayersdraft.csv")
 
 # Calculate the average for each metric by overall_pick
-average_stats_by_pick <- nbaplayersdraft %>%
-  filter(overall_pick <= 54) %>%
-  group_by(overall_pick) %>%
+average_stats_by_pick <- player_data %>%
+  filter(draft_number <= 54) %>%
+  group_by(draft_number) %>%
   summarise(
     average_points_per_game = mean(points_per_game, na.rm = TRUE),
     average_total_rebounds = mean(average_total_rebounds, na.rm = TRUE),
@@ -82,7 +101,7 @@ long_stats_by_pick <- average_stats_by_pick %>%
   )
 
 # Create the faceted plot
-ggplot(long_stats_by_pick, aes(x = overall_pick, y = Average)) +
+ggplot(long_stats_by_pick, aes(x = draft_number, y = Average)) +
   geom_line() + 
   facet_wrap(~Metric, scales = "free_y", nrow = 4) +
   theme_minimal() +
@@ -95,7 +114,7 @@ ggplot(long_stats_by_pick, aes(x = overall_pick, y = Average)) +
 
 ```
 
-For each metric, they seem to level off around the 10-15th pick. So it would be to a team's benefit to get draft pick somewhere in the top 10. While there seems to be an occasional star player picked in between 15 and 40, generally a team shouldn't worry about the order as much.
+For each metric, they seem to level off around the 10-15th pick. Therefore, it would be to a team's benefit to get a draft pick somewhere in the top 10. While there seems to be a few star players picked in between 15 and 40, generally a team shouldn't worry about the order as much unless they're specifically targeting a certain player.
 
 
 ### Advanced NBA Stats for Top 5 Picks Over time
@@ -103,12 +122,12 @@ For each metric, they seem to level off around the 10-15th pick. So it would be 
 ```{r}
 
 # Filter the data to include only the top 5 picks
-top_picks <- nbaplayersdraft %>%
-  filter(overall_pick >= 1 & overall_pick <= 5)
+top_picks <- player_data %>%
+  filter(draft_number >= 1 & draft_number <= 5)
 
 # Reshape the data to long format for faceting by metric
 top_picks_long <- top_picks %>%
-  select(year, overall_pick, win_shares, value_over_replacement) %>%
+  select(year, draft_number, win_shares, value_over_replacement) %>%
   pivot_longer(
     cols = c(win_shares, value_over_replacement),
     names_to = "Metric",
@@ -116,7 +135,7 @@ top_picks_long <- top_picks %>%
   )
 
 # Create the faceted scatter plot for Win Shares and Value Over Replacement over time for the top 5 picks
-ggplot(top_picks_long, aes(x = year, y = Value, color = factor(overall_pick))) +
+ggplot(top_picks_long, aes(x = year, y = Value, color = factor(draft_number))) +
   geom_point() +
   scale_color_brewer(palette = "PuBu", direction=-1) +  # Use a sequential color palette
   facet_wrap(~Metric, scales = "free_y") +  # Create facets for each metric
@@ -129,23 +148,16 @@ ggplot(top_picks_long, aes(x = year, y = Value, color = factor(overall_pick))) +
 
 ```
 
-The first overall pick overall performs well in statistics of "win share" and "values over replacement", but it does not consistently end up being the best out of their draft class. For example, the first pick in 1998 scored the lowest in "win shares" and "values over replacement". In conclusion, the players with higher priority pick number may reflect the players' potential. They may also have consistent performance in NBA with their draft.
+Two advanced statistics in the NBA that are good estimators for "winning" players are win shares and value over replacement. Win share is a measure that is assigned to players based on their offense, defense, and playing time. Value Over Replacement (VORP) is a statistic that quantifies how much a basketball player contributes to their team's success compared to a replacement-level (average) player.
+
+The first overall pick overall performs well in statistics of "win share" and "values over replacement", but it does not consistently end up being the best out of their draft class. For example, the first pick in 1998 scored the lowest in the top 5 for win shares and VORP. In conclusion, the players with higher priority pick number reflects the players' potential in the NBA but it is difficult to gauge that potential consistently. It's important to note that both metrics aren't significant for players drafted in the past 5-10 years because they're new players and are actively try to improving their skills.
+
 
 ## Total Player Achievements and their Draft Team
 
-
 ```{r}
-library(dplyr)
-library(ggplot2)
-library(readr)
-library(tidyr)
 
-merged_achievement_data <- left_join(player_achievements, nbaplayersdraft, by = c("Player Name" = "player"))
-
-merged_achievement_data <- merged_achievement_data %>%
-  filter(!is.na(team))
-
-team_achievements <- merged_achievement_data %>%
+team_achievements <- player_data %>%
   group_by(team) %>%
   summarise(
     TotalAllStarSelections = sum(Total_All_Star_Selections, na.rm = TRUE),
@@ -158,7 +170,7 @@ team_achievements <- merged_achievement_data %>%
 plot1 <- ggplot(team_achievements, aes(x = TotalAllStarSelections, y = reorder(team, TotalAllStarSelections))) +
   geom_point() +
   theme_minimal() +
-  labs(title = "Total All-Star Selections per Team",
+  labs(title = "Total All-Star Selections for Players Drafted By Each Team",
        x = "Total All-Star Selections",
        y = "Team") +
   theme(axis.text.y = element_text(hjust = 1))
@@ -166,7 +178,7 @@ plot1 <- ggplot(team_achievements, aes(x = TotalAllStarSelections, y = reorder(t
 plot2 <- ggplot(team_achievements, aes(x = TotalAllNBASelections, y = reorder(team, TotalAllNBASelections))) +
   geom_point() +
   theme_minimal() +
-  labs(title = "Total All-NBA Selections per Team",
+  labs(title = "Total All-NBA Selections for Players Drafted By Each Team",
        x = "Total All-NBA Selections",
        y = "Team") +
   theme(axis.text.y = element_text(hjust = 1))
@@ -174,7 +186,7 @@ plot2 <- ggplot(team_achievements, aes(x = TotalAllNBASelections, y = reorder(te
 plot3 <- ggplot(team_achievements, aes(x = TotalChampionships, y = reorder(team, TotalChampionships))) +
   geom_point() +
   theme_minimal() +
-  labs(title = "Total Championships per Team",
+  labs(title = "Total Championships for Players Drafted By Each Team",
        x = "Total Championships",
        y = "Team") +
   theme(axis.text.y = element_text(hjust = 1))
@@ -184,36 +196,43 @@ plot2
 plot3
 
 ```
-There is significant variability in the number of championships won by teams. Strong team will always tend to win the championship, because of its management, and competency. Wining championship will also earn money and fans for the team, which will assist the team wining championships.Teams like "GSW" and "CHI" have a high number of championships, which suggests a history of strong performance in NBA. Teams, such as "BRK",and "CHO" have not won any championships.
+
+Three of the greatest achievements in the NBA are all-star game selections, all-NBA team selections, and championships. The All-Star Game is a basketball exhibition game hosted every February by the NBA and showcases 24 of the league's star players. The All-NBA Team is an annual NBA honor bestowed on the best players in the league following every NBA season. The NBA champion is the team that wins the NBA Finals which is the annual championship series between the Eastern and Western Conference champions.
+
+Important to note that players that are champions don't need to be statistically great players since they simply need to be on the winning team. In other words, they could good team players instead. Overall, it seems that the Golden State Warriors (GSW) and Cleveland Cavaliers (CLE) have consistently drafted players that would be high achieving by being top 5 for all three achievements. Another observation is that the Seattle SuperSonics and Orlando Magic are especially good at drafting statistically great players since they are top 5 in all-star game selections and all-NBA team selections.
 
 
-### Players performance and their drafted team
+
+### Player Performance and Drafted Team
+
 ```{r}
-df_team <- df_processed %>%
+df_team <- player_data %>%
   select(team, usg_pct:ast_pct, field_goal_percentage:free_throw_percentage)%>%
   group_by(team)%>%
   summarise(across(where(is.numeric), mean, na.rm = TRUE))%>%
-  arrange(free_throw_percentage) %>%  
+  arrange(ts_pct) %>%  
   mutate(team = factor(team, levels = team)) %>%
   pivot_longer(cols=usg_pct:free_throw_percentage)
 
 
 ggplot(df_team, aes(x = value, y = team, fill=name)) + 
   geom_point(stat = "identity", shape = 21, color = "black", size = 1.5) +
-  labs(y = "Team", x = "Category")+
+  labs(y = "Team", x = "Category", title = "Player Performance and Drafted Team")+
   scale_color_manual(values = c("blue", "red",  "green", "yellow", "purple", "#008080"))
 ```
-NOH, DET, and BRK teams always choose the players with greater free throw ability. The players chosen by NOK and CHO tend to have low free throw percentage. TOR and MIL are better at choosing players with strong 3 point percentage. Players picked by WSB, LAC, and GSW tend to have low 3 point percentage. NOK teams is likely to choose players with low assist ability. There is no obvious difference among players of teams in field goal, ts and usg. In summary, teams choose the players with different strength, but players picked by NOK tend to weakness in all aspects.
+NOH, DET, and BRK teams always choose the players with greater free throw ability. The players chosen by NOK and CHO tend to have low free throw percentage. TOR and MIL are better at choosing players with strong 3 point percentage. Players picked by WSB, LAC, and GSW tend to have low 3 point percentage. NOK teams is likely to choose players with low assist ability. 
+
+True shooting percentage is an advanced statistic that measures a player's efficiency at shooting the ball. It is intended to more accurately calculate a player's shooting than field goal percentage, free throw percentage, and three-point field goal percentage taken individually. Aside from NOH, BRK, and CHA, teams are drafting players that have relatively similar true shooting percentages. In summary, teams choose the players with different strengths, but players picked by NOK tend to be poor in all lot of aspects.
+
 
 ## College Draft Targets
 
-### Points, Rebounds, Assists for NBA Players from each College
-
+### General Performance Metrics for each College
 
 ```{r}
 
 # Calculate the totals for each metric by college
-total_stats_by_college <- nbaplayersdraft %>%
+total_stats_by_college <- player_data %>%
   group_by(college) %>%
   summarise(
     total_points_per_game = sum(points_per_game, na.rm = TRUE),
@@ -246,34 +265,15 @@ plot3
 
 ```
 
-### Analyze the performance of players based on their colleges
-```{r}
-df_cleve <- df_processed %>%
-  select(college, usg_pct:ast_pct, field_goal_percentage:free_throw_percentage)%>%
-  mutate(college = ifelse(college == "", "Unknown", college))%>%
-  group_by(college)%>%
-  filter(n()>12)%>%
-  summarise(across(where(is.numeric), mean, na.rm = TRUE))%>%
-  arrange(free_throw_percentage) %>%  
-  mutate(college = factor(college, levels = college)) %>%
-  pivot_longer(cols=usg_pct:free_throw_percentage)
+Looking at the highest total points per game, rebounds, assists, these colleges seem to be producing the best NBA players: Kentucky, Duke, UCLA, Arizona, Kansas. This conclusion is consistent with the fact that these colleges are known to have good basketball programs and teams.
 
+### Top College Targets for the NBA Draft
 
-ggplot(df_cleve, aes(x = value, y = college, fill=name)) + 
-  geom_point(stat = "identity", shape = 21, color = "black", size = 1.5) +
-  labs(y = "College", x = "Category")+
-  scale_color_manual(values = c("blue", "red",  "green", "yellow", "purple", "#008080"))
-```
-To analyze the influence of college in draft, we analyze the players' performance in assist, field goal, free throw, shooting efficiency, and, team plays. The college will influence the style of the player in the shooting and team plays. This analysis is to find out the styles of players from certain college. To avoid the randomness of the players, we only analyze the colleges with more than 12 players. We noticed that there is significant difference in ts, usg, and field goals. Players from Gonzaga, Villanova, and Oregan tend to have higher free throw percentage, while players from Louisville, Syracuse, and Florida, tend to lower free throw percentage. If NBA team need a player to earn points through free throw, they should pick players from Louisville, Syracuse, and Florida. The players in performance in X_3 point is around the same, except players from Louisville, Florida, Maryland, and LSU. The only two college with outstanding X_3 point are Villanova, and Oregona. If NBA team need a player to earn three points, they should pick players from Villanova, and Oregona, and avoid the four colleges mentioned above. Players from UCLA, Iowa state, and Oregan tend to have higher assist percentage, while players from stanford, Gergetown, and Maryland tend to lower assist percentage (close to 0). If NBA team need a player to earn points through corporation, they should pick players from UCLA, Iowa state, and Oregan. In conclusion, players from Oregona tend to have better performance while players from Maryland perform bad in statistics.
-
-### Top College Targets for Draft Teams
-
-These colleges seem to be producing the best NBA players: Kentucky, Duke, UCLA, Arizona, Kansas. Are there team targeting players from these colleges on draft night?
 
 ```{r}
 
 # Filter the dataset for the specified colleges
-filtered_data <- nbaplayersdraft %>%
+filtered_data <- player_data %>%
   filter(college %in% c("Kentucky", "Duke", "UCLA", "Arizona", "Kansas"))
 
 # Count the number of players drafted by each team from these colleges
@@ -293,13 +293,35 @@ ggplot(team_draft_counts, aes(x = reorder(team, n), y = n, fill = college)) +
 
 ```
 
+The teams that have drafted the most players from these colleges are DET, PHO, SAC, and LAL. Detroit Pistons (DET) and Los Angeles Lakers (LAL) have gotten multiple championships out of those four teams. Also, Pheonix Suns (PHO) have the fifth-best all-time winning percentage in the NBA. Therefore, the college a player comes from could be an important factor when drafting.
+
+### Advanced Performance Metrics for each College
+
+```{r}
+df_cleve <- player_data %>%
+  select(college, usg_pct:ast_pct, field_goal_percentage:free_throw_percentage)%>%
+  mutate(college = ifelse(college == "", "Unknown", college))%>%
+  group_by(college)%>%
+  filter(n()>12)%>%
+  summarise(across(where(is.numeric), mean, na.rm = TRUE))%>%
+  arrange(free_throw_percentage) %>%  
+  mutate(college = factor(college, levels = college)) %>%
+  pivot_longer(cols=usg_pct:free_throw_percentage)
+
+
+ggplot(df_cleve, aes(x = value, y = college, fill=name)) + 
+  geom_point(stat = "identity", shape = 21, color = "black", size = 1.5) +
+  labs(y = "College", x = "Category")+
+  scale_color_manual(values = c("blue", "red",  "green", "yellow", "purple", "#008080"))
+```
+To evaluate the impact of college on NBA draft prospects, our analysis focused on metrics like assists, field goals, free throws, shooting efficiency, and team play, specifically examining colleges with over 12 players in the NBA for statistical accuracy. Our key findings revealed that players from Gonzaga, Villanova, and Oregon have higher free throw percentages, making them preferable for teams seeking free-throw proficiency. Conversely, players from Louisville, Syracuse, and Florida showed lower percentages in this area. For three-point shooting, athletes from Villanova and Oregon were standout performers, while those from Louisville, Florida, Maryland, and LSU were less consistent. In terms of assists, UCLA, Iowa State, and Oregon players had better performances compared to their counterparts from Stanford, Georgetown, and Maryland, who had notably lower assist percentages. Overall, the study suggests that Oregon players generally exhibit superior performance, while Maryland athletes lag in these key statistics, offering valuable insights for NBA teams in making draft decisions based on specific skill requirements.
 
 
 ## Drafting Based on Physical Attributes
 
-### Analyze the perfomance based on players's height and weight
+### Perfomance Based on Players' Height and Weight
 ```{r}
-df_para <- df_processed[, c(3, 4, 6:11, 22:34)]
+df_para <- player_data[, c(3, 4, 6:11, 22:34)]
 df_related <- df_para[, c(1,2, 4,5, 8,12, 16, 17)]
 
 
@@ -310,13 +332,18 @@ ggpairs(df_related,
 cor_matrix <- cor(df_para)
 print(cor_matrix )
 ```
-To analyze the factor of weight and height in drafting. We first analyzed the correlation matrix of the height and weight to the other performance statistics. It is reasonable that height and weight are highly correlated and statistics about rebound, assist, and X_3 points have high absolute value of correlation score with height and weight. Then, we analyze the pair plot of these variables. The distribution of performance variables are all positive skewed, while the distribution of height and weight are close to the normal distribution. The scatter plot of height and weight with performance statistics are almost the same. We have the same conclusion for them. The different thing is height plot tend to have grid shape, which may caused by players tend to round up their height to integer. Statistics about rebound are positive related to the height weight, Players with high weight and height tend to have larger variance in the rebound statistics, whereas player with low weight and height has lower variance. We can draw the following conclusion that if the team need to strength their rebound aspects, they should absolutely draw players with high height and weight, but these players may not get enough rebound in the match.The similar things happen to the assist statistics. Assist statistics are negatively correlated to the height and weight. Players with high weight and height tend to have lower variance in the assist statistics, whereas player with low weight and height has higher variance. If a team need to strength their team corporation(assist), they should absolutely draw players with low height and weight, but these players may not assist enough in the match. We also discover that the variance difference is more obvious in the average assist, but less in assist percentage(Percentage of teammate field goals the player assisted). 
+In our study to understand the role of height and weight in NBA drafting, we analyzed their correlation with performance statistics like rebounds, assists, and three-point shooting. The analysis revealed a strong correlation between height and weight and these key performance metrics. We observed through pair plots that while performance metrics typically showed a positive skew, the distribution of height and weight appeared closer to normal. Notably, the height data exhibited a grid-like pattern, possibly due to players rounding up their height measurements.
 
-### Analyze the weight and height of players over time
+Our findings highlighted a few critical points: firstly, there's a positive correlation between height and weight and rebound statistics. Players with higher height and weight demonstrated greater variance in rebounding, suggesting that teams in need of strengthening their rebounding should target taller and heavier players, though this doesn't necessarily guarantee higher rebound counts in games. Secondly, assist statistics showed a negative correlation with height and weight. Players who are shorter and lighter tended to have higher variance in assists, implying that teams aiming to improve team play or assists might consider drafting such players, albeit without assurance of high assist numbers in actual games. We also found that the variance difference was more pronounced in average assists than in assist percentage, which is the proportion of teammate field goals a player assisted.
+
+These insights provide a strategic perspective for NBA teams, highlighting the importance of considering players' physical attributes in relation to specific gameplay requirements during the drafting process.
+
+### Weight and Height of Players over Time
+
 ```{r}
 #install.packages("ggforce")
 library(ggforce)
-df_overtime <- df_processed%>%
+df_overtime <- player_data %>%
   filter(draft_round ==1)
 
 
@@ -330,11 +357,12 @@ for (n in c(1,2, 3)){
   print(p)
 }
 ```
-To analyze the draft preference of NBA team, facet the heatmap by draft year. We filter the players in the first draft round, to reflect the NBA preference. The general shape is linear relationship with height(180-220) and weight(80-130). However, there is difference in draft preference. In 1991, 1995, 2006, and 2012, NBA teams prefers players with larger height and weight. In 1994, 2006, 2011,2019，and, 2021, NBA teams prefer players with smaller height and weight. In 2012, 2017,and 2018, NBA teams prefer players with large height or small height. The preference doe not last long for years and we cannot derive any conclusion from this. However, players whose height is around 210 or 190, with corresponding weight of 120 or 80, are overall preferred to be selected.
 
-### Analyze the perfomance difference bwtween American and non-American players
+In analyzing NBA draft preferences, we examined first-round picks, focusing on player height (180-220 cm) and weight (80-130 kg). The data revealed varying trends over the years. For instance, larger players were favored in 1991, 1995, 2006, and 2012, while smaller players were preferred in 1994, 2006, 2011, 2019, and 2021. Some years, like 2012, 2017, and 2018, showed a mix, favoring either very tall or short players. Despite these fluctuations, players around 210 or 190 cm tall, weighing about 120 or 80 kg, were generally more likely to be selected in the first round, indicating a diverse range of draft preferences in the NBA.
+
+### Perfomance Between American and Non-American Players
 ```{r}
-df_origin <- df_processed %>%
+df_origin <- player_data %>%
   mutate(country = ifelse(country == "USA", "USA","non-American"))%>%
   group_by(country)%>%
   summarise(across(where(is.numeric), mean, na.rm = TRUE))%>%
@@ -348,7 +376,7 @@ ggplot(df_origin, aes(statistics, value, fill = country))+
   geom_bar(stat="identity", position = position_dodge())+
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
-The overall performance of non-American players is slightly worse than that of American player. The obvious difference between american player and non-american player is assist percentage. The assist percentage of non-american player is 20% lower than that of american player. Non-american did not show any adapting problem in playing in NBA. Drafting american players will not be a better choice. 
+The overall performance of non-American players is slightly worse than that of American player. The obvious difference between american player and non-american player is assist percentage. The assist percentage of non-American player is 20% lower than that of american player. It's safe to assume that non-American players did not show any problem adapting to playing in the NBA. While there's recent surge in the number of star non-American players, there doesn't seem to be enough of a difference between American and non-American players to warrant that being a factor when drafting.
 
 
 
