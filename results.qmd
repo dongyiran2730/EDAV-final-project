@@ -1,5 +1,5 @@
 # Results
-The pick number(ranking of draft player) can relatively reflect the players' ability, especially for the top 10 players. However, the players with higher pick number does not represent they are absolutely better than players with lower pick number, in the aspect of values and win shares.The ability in drafting better player does not have significant relationship with wining championships.Players from Oregon and Kentucky university tend to perform well in NBA. Players from Maryland university perform bad. Players with larger weight and height always have high rebound score, while players with lower weight and height always have higher assist score. NBA team tend to choose players around 210cm and 120kg or players around 190cm and 80kg. Non-american players do not show significant adapting problem in NBA. 
+Draft pick numbers generally give an idea of a player's potential, particularly among the top 10 picks. Yet, it's not a hard rule that players with higher pick numbers are superior in all aspects, like value and win shares, compared to those with lower pick numbers. There's no strong correlation between skill in drafting top players and winning championships. Notably, players from Oregon and Kentucky universities often excel in the NBA, whereas those from Maryland University typically underperform. Physically larger players, with more height and weight, tend to score higher in rebounds, while smaller players often achieve higher assist scores. NBA teams frequently opt for players around 210 cm and 120 kg or those closer to 190 cm and 80 kg. Also, non-American players usually adapt well to the NBA without significant issues.
 
 ## Data Preprocess
 ```{r}
@@ -28,7 +28,8 @@ d1 <- data1 %>%
     ast_pct = sum(ast_pct*gp)/total_game,
     country = first(country),
     draft_round = first(draft_round),
-    draft_year = first(draft_year)
+    draft_year = first(draft_year),
+    .groups = "drop"
   ) 
 d1$'draft_round'[d1$'draft_round' == "Undrafted"] <- "0"
 d1$'draft_round' = as.numeric(d1$'draft_round')
@@ -37,7 +38,7 @@ d1$'draft_year' = as.numeric(d1$'draft_year')
 data2$"overall_pick" = as.character(data2$"overall_pick")
 df <- inner_join(d1, data2, by = c("player_name" = "player_name", "draft_number" = "overall_pick"))
 df <- left_join(df, data3, by = c ("player_name" = "Player.Name"))
-print(names(df))
+
 df <- df %>%
   mutate(
     Total_All_Star_Selections = replace(Total_All_Star_Selections, is.na(Total_All_Star_Selections), 0),
@@ -117,7 +118,7 @@ top_picks_long <- top_picks %>%
 # Create the faceted scatter plot for Win Shares and Value Over Replacement over time for the top 5 picks
 ggplot(top_picks_long, aes(x = year, y = Value, color = factor(overall_pick))) +
   geom_point() +
-  scale_color_brewer(palette = "Set1") +  # Use a qualitative color palette
+  scale_color_brewer(palette = "PuBu", direction=-1) +  # Use a sequential color palette
   facet_wrap(~Metric, scales = "free_y") +  # Create facets for each metric
   theme_minimal() +
   labs(title = "Win Shares and Value Over Replacement for Top 5 Overall Picks Over Time",
@@ -128,8 +129,7 @@ ggplot(top_picks_long, aes(x = year, y = Value, color = factor(overall_pick))) +
 
 ```
 
-The first overall pick doesn't consistently end up being the best out of their draft class.
-
+The first overall pick overall performs well in statistics of "win share" and "values over replacement", but it does not consistently end up being the best out of their draft class. For example, the first pick in 1998 scored the lowest in "win shares" and "values over replacement". In conclusion, the players with higher priority pick number may reflect the players' potential. They may also have consistent performance in NBA with their draft.
 
 ## Total Player Achievements and their Draft Team
 
@@ -184,6 +184,9 @@ plot2
 plot3
 
 ```
+There is significant variability in the number of championships won by teams. Strong team will always tend to win the championship, because of its management, and competency. Wining championship will also earn money and fans for the team, which will assist the team wining championships.Teams like "GSW" and "CHI" have a high number of championships, which suggests a history of strong performance in NBA. Teams, such as "BRK",and "CHO" have not won any championships.
+
+
 ### Players performance and their drafted team
 ```{r}
 df_team <- df_processed %>%
@@ -348,16 +351,4 @@ ggplot(df_origin, aes(statistics, value, fill = country))+
 The overall performance of non-American players is slightly worse than that of American player. The obvious difference between american player and non-american player is assist percentage. The assist percentage of non-american player is 20% lower than that of american player. Non-american did not show any adapting problem in playing in NBA. Drafting american players will not be a better choice. 
 
 
-### 0ptional
 
-```{r}
-df_draft <-df_processed %>%
-  group_by(draft_round)%>%
-  summarise(across(where(is.numeric), mean, na.rm = TRUE))%>%
-  select(draft_round, average_total_rebounds:win_shares)%>%
-  pivot_longer(cols=average_total_rebounds:win_shares)
-df_draft$draft_round<-as.character(df_draft$draft_round)
-ggplot(df_draft, aes(x=name, y=value, fill=draft_round))+
-  geom_bar(stat="identity", position = position_dodge())
-
-```

@@ -67,8 +67,9 @@ d1 <- data1 %>%
     ast_pct = sum(ast_pct*gp)/total_game,
     country = first(country),
     draft_round = first(draft_round),
-    draft_year = first(draft_year)
-  ) 
+    draft_year = first(draft_year),
+    .groups = "drop"
+  )
 d1$'draft_round'[d1$'draft_round' == "Undrafted"] <- "0"
 d1$'draft_round' = as.numeric(d1$'draft_round')
 d1$'draft_year'[d1$'draft_year' == "Undrafted"] <- "0"
@@ -76,7 +77,7 @@ d1$'draft_year' = as.numeric(d1$'draft_year')
 data2$"overall_pick" = as.character(data2$"overall_pick")
 df <- inner_join(d1, data2, by = c("player_name" = "player_name", "draft_number" = "overall_pick"))
 df <- left_join(df, data3, by = c ("player_name" = "Player.Name"))
-print(names(df))
+
 df <- df %>%
   mutate(
     Total.All.Star.Selections = replace(Total_All_Star_Selections, is.na(Total_All_Star_Selections), 0),
@@ -85,7 +86,7 @@ df <- df %>%
   )
 ```
 
-
+### Missing plot analysis
 ```{r}
 miss_df <- colSums(is.na(df))  |>
   sort(decreasing=TRUE)
@@ -102,7 +103,7 @@ From the print result, we can see that the column with the most missing values i
 
 We have observed that there are zeros in columns such as "3_point_percentage" and "free_throw_percentage," so "na" does not indicate that the player did not score 3 points or did not earn free throw points. Instead, it is not recorded due to unknown factors or data loss on the website. We have verified this data on the original website (https://www.basketball-reference.com/), where it is also not recorded. Additionally, we have noticed that missing values in one column are correlated with missing values in another column. Otherwise, the missing pattern would be a single missing value in each row. We will investigate this further in the following graph. There are also two players with a significant amount of missing data.
 
-
+### Analysis the relationship betwen na counts and 
 ```{r}
 library(tidyverse)
 df$na_count <- rowSums(is.na(df))
